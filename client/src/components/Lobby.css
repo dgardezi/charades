@@ -1,0 +1,76 @@
+html, body {
+    font-family: 'Roboto', sans-serif;
+    padding: 0;
+    margin: 0;
+  }
+  
+  #root {
+    height: 100vh;
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  .lobbyOuterContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    height: 100vh;
+    align-items: center;
+    background-color: #1A1A1D;
+  }
+  
+  .lobbyInnerContainer {
+    width: 75%;
+  }
+  
+  .heading {
+    color: white;
+    font-size: 5em;
+    padding-bottom: 10px;
+  }
+
+  .gameCode {
+    color: white;
+    font-size: 3em;
+    padding-bottom: 10px;
+  }
+
+  .players {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .player {
+    display: inline-block;
+    width: 160px;
+    height: 120px;
+    background: white;
+    margin: 5px;
+  }
+  
+  .button {
+      color: #fff !important;
+      font-weight: bold;
+      text-decoration: none;
+      background: #2979FF;
+      padding: 20px;
+      border-radius: 5px;
+      display: inline-block;
+      border: none;
+      width: 100%;
+      cursor: pointer;
+  }
+  
+  .mt-20 {
+    margin-top: 20px;
+  }
+  
+  button:focus {
+    outline: 0;
+  }
+  

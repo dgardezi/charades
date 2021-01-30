@@ -1,0 +1,82 @@
+html, body {
+    font-family: 'Roboto', sans-serif;
+    padding: 0;
+    margin: 0;
+  }
+  
+  #root {
+    height: 100vh;
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  .gameOuterContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    height: 100vh;
+    align-items: center;
+    background-color: #1A1A1D;
+  }
+  
+  .gameInnerContainer {
+    width: 90%;
+  }
+
+  .gameView {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: stretch;
+  }
+  
+  .heading {
+    color: white;
+    font-size: 5em;
+    padding-bottom: 10px;
+  }
+
+  .gameCode {
+    color: white;
+    font-size: 3em;
+    padding-bottom: 10px;
+  }
+
+  .guessers {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .guesser {
+    display: inline-block;
+    width: 120px;
+    height: 90px;
+    background: white;
+    margin: 5px;
+  }
+
+  .actor {
+    display: inline-block;
+    width: 160px;
+    height: 120px;
+    background: white;
+    margin: 5px;
+  }
+
+  .chat {
+    display: inline-block;
+    width: 250px;
+    height: 700px;
+    background: white;
+    margin: 5px;
+  }
+  
+  .mt-20 {
+    margin-top: 20px;
+  }
+  

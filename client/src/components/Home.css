@@ -12,8 +12,9 @@ html, body {
   box-sizing: border-box;
 }
 
-.joinOuterContainer {
+.homeOuterContainer {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   text-align: center;
   height: 100vh;
@@ -21,21 +22,25 @@ html, body {
   background-color: #1A1A1D;
 }
 
-.joinInnerContainer {
-  width: 20%;
+.homeInnerContainer {
+  width: 75%;
 }
 
-.joinInput {
+.homeInput {
   border-radius: 0;
   padding: 15px 20px;
   width: 100%;
 }
 
+.createGameLink {
+  text-decoration: underline;
+  color: #fff;
+}
+
 .heading {
   color: white;
-  font-size: 2.5em;
+  font-size: 5em;
   padding-bottom: 10px;
-  border-bottom: 2px solid white;
 }
 
 .button {
@@ -48,22 +53,11 @@ html, body {
     display: inline-block;
     border: none;
     width: 100%;
+    cursor: pointer;
 }
 
 .mt-20 {
   margin-top: 20px;
-}
-
-@media (min-width: 320px) and (max-width: 480px) {
-  .joinOuterContainer {
-    height: 100%;
-  }
-
-  .joinInnerContainer {
-    width: 90%;
-  }
-
-
 }
 
 button:focus {
