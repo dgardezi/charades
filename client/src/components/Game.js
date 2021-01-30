@@ -1,35 +1,36 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 import "./Game.css";
 
 const Game = () => {
   return (
-    <div className="lobbyOuterContainer">
-      <div className="lobbyInnerContainer">
-        <div className="header">
-          <h1 className="heading">charades</h1>
+    <div className="gameOuterContainer">
+      <div className="gameInnerContainer">
+
+        <div className="gameWord">
+          <h1>_ _ _ _ _ _ _</h1>
         </div>
+
         <div className="gameView">
-          <div className="guessers">
-            <div className="guesser"></div>
-            <div className="guesser"></div>
-            <div className="guesser"></div>
-            <div className="guesser"></div>
-            <div className="guesser"></div>
-            <div className="guesser"></div>
-            <div className="guesser"></div>
+          <div className="gameGuessers">
+            <div className="gameGuesser"></div>
+            <div className="gameGuesser"></div>
+            <div className="gameGuesser"></div>
+            <div className="gameGuesser"></div>
+            <div className="gameGuesser"></div>
+            <div className="gameGuesser"></div>
+            <div className="gameGuesser"></div>
           </div>
-          <div className="actor">
-            <p>actor camera</p>
+          <div className="gameActors">
+          <div className="gameActor"></div>
           </div>
-          <div className="chat">
-            <p>chat window</p>
+          <div className="gameChat">
+            <div className="gameChatWindow">
+              <p>chat window</p>
+            </div>
           </div>
         </div>
-        <div className="footer">
-          <h1 className="gameCode">a b c d</h1>
-        </div>
+
       </div>
     </div>
   );

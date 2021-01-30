@@ -7,28 +7,34 @@ const Lobby = () => {
   return (
     <div className="lobbyOuterContainer">
       <div className="lobbyInnerContainer">
-        <div className="header">
-          <h1 className="heading">charades</h1>
-          <h2 className="gameCode">a b c d</h2>
+
+        <div className="lobbyHeader">
+          <h1>charades.me</h1>
+          <h2>game code: abcd</h2>
         </div>
-        <div className="players">
-          <div className="player" />
-          <div className="player" />
-          <div className="player" />
-          <div className="player" />
-          <div className="player" />
-          <div className="player" />
-          <div className="player" />
-          <div className="player" />
+
+        <div className="lobbyPlayers">
+          <div className="lobbyPlayer" />
+          <div className="lobbyPlayer" />
+          <div className="lobbyPlayer" />
+          <div className="lobbyPlayer" />
+          <div className="lobbyPlayer" />
+          <div className="lobbyPlayer" />
+          <div className="lobbyPlayer" />
+          <div className="lobbyPlayer" />
         </div>
-        <Link to="/game">
-          <button className={"button mt-20"} type="submit">
-            join
-          </button>
-        </Link>
+
+        <div className="startGame">
+          <Link to="/game" className="startButtonLink">
+            <button className={"startButton"} type="submit">
+              start game
+            </button>
+          </Link>
+        </div>
+
       </div>
     </div>
   );
-}
+};
 
 export default Lobby;

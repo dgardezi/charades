@@ -1,7 +1,9 @@
-html, body {
-  font-family: 'Roboto', sans-serif;
+html,
+body {
+  font-family: "Roboto", sans-serif;
   padding: 0;
   margin: 0;
+  line-height: 0;
 }
 
 #root {
@@ -16,50 +18,84 @@ html, body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   text-align: center;
   height: 100vh;
-  align-items: center;
-  background-color: #1A1A1D;
+  background-color: #1a1a1d;
 }
 
 .homeInnerContainer {
-  width: 75%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  width: 90%;
 }
 
-.homeInput {
+.homeHeader {
+  font-size: 5em;
+  color: white;
+}
+
+.joinRoomForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 50%;
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+.nicknameInput {
   border-radius: 0;
+  border: none;
   padding: 15px 20px;
+  width: 50%;
+}
+
+.gamecodeInput {
+  border-radius: 0;
+  border: none;
+  padding: 15px 20px;
+  width: 50%;
+  margin-top: 30px;
+}
+
+.joinButtonLink {
+  width: 50%;
+  margin-top: 30px;
+}
+
+.joinButton {
+  color: #fff !important;
+  font-weight: bold;
+  text-decoration: none;
+  background: #2979ff;
+  padding: 15px 20px;
+  border-radius: 5px;
+  display: inline-block;
+  border: none;
   width: 100%;
+  cursor: pointer;
+}
+
+.joinButton button:focus {
+  outline: 0;
+}
+
+.createGame {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .createGameLink {
+  font-size: 1em;
   text-decoration: underline;
   color: #fff;
-}
-
-.heading {
-  color: white;
-  font-size: 5em;
-  padding-bottom: 10px;
-}
-
-.button {
-    color: #fff !important;
-    font-weight: bold;
-    text-decoration: none;
-    background: #2979FF;
-    padding: 20px;
-    border-radius: 5px;
-    display: inline-block;
-    border: none;
-    width: 100%;
-    cursor: pointer;
-}
-
-.mt-20 {
-  margin-top: 20px;
-}
-
-button:focus {
-  outline: 0;
 }

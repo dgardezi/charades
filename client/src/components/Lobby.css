@@ -1,76 +1,101 @@
-html, body {
-    font-family: 'Roboto', sans-serif;
-    padding: 0;
-    margin: 0;
-  }
-  
-  #root {
-    height: 100vh;
-  }
-  
-  * {
-    box-sizing: border-box;
-  }
-  
-  .lobbyOuterContainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    height: 100vh;
-    align-items: center;
-    background-color: #1A1A1D;
-  }
-  
-  .lobbyInnerContainer {
-    width: 75%;
-  }
-  
-  .heading {
-    color: white;
-    font-size: 5em;
-    padding-bottom: 10px;
-  }
+html,
+body {
+  font-family: "Roboto", sans-serif;
+  padding: 0;
+  margin: 0;
+  line-height: 0;
+}
 
-  .gameCode {
-    color: white;
-    font-size: 3em;
-    padding-bottom: 10px;
-  }
+#root {
+  height: 100vh;
+}
 
-  .players {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
+* {
+  box-sizing: border-box;
+}
 
-  .player {
-    display: inline-block;
-    width: 160px;
-    height: 120px;
-    background: white;
-    margin: 5px;
-  }
-  
-  .button {
-      color: #fff !important;
-      font-weight: bold;
-      text-decoration: none;
-      background: #2979FF;
-      padding: 20px;
-      border-radius: 5px;
-      display: inline-block;
-      border: none;
-      width: 100%;
-      cursor: pointer;
-  }
-  
-  .mt-20 {
-    margin-top: 20px;
-  }
-  
-  button:focus {
-    outline: 0;
-  }
-  
+.lobbyOuterContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100vh;
+  background-color: #1a1a1d;
+}
+
+.lobbyInnerContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  width: 90%;
+}
+
+.lobbyHeader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+}
+
+.lobbyHeader h1 {
+  font-size: 10em;
+  margin-bottom: 50px;
+}
+
+.lobbyHeader h2 {
+  font-size: 3em;
+}
+
+.lobbyPlayers {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+.lobbyPlayer {
+  display: inline-block;
+  width: 160px;
+  height: 120px;
+  background: white;
+  margin: 0px 5px;
+}
+
+.startGame {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 50%;
+}
+
+.startButtonLink {
+  width: 50%;
+}
+
+.startButton {
+  color: #fff !important;
+  font-weight: bold;
+  text-decoration: none;
+  background: #2979ff;
+  padding: 15px 20px;
+  border-radius: 5px;
+  display: inline-block;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+}
+
+.startButton button:focus {
+  outline: 0;
+}
