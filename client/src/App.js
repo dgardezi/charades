@@ -80,6 +80,7 @@ const App = () => {
   };
 
   const playerDisconnected = (player) => {
+    console.log("player disconnected");
     setPlayers((prevPlayers) => prevPlayers.filter((p) => p !== player));
   };
 

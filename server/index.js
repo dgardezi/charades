@@ -61,14 +61,17 @@ io.on("connect", (socket) => {
   });
 
   socket.on('sendMessage', ({message}) => {
+    console.log(message);
     const user = getUser(socket.id);
+    console.log(user);
 
-    io.to(user.room).emit('message', { user: user.name, text: message });
+    io.to(user.roomName.toUpperCase()).emit('message', { user: user.userName, text: message });
   });
 
   socket.on("disconnect", () => {
     console.log("user disconnected");
     const user = getUser(socket.id);
+    removeUserFromRoom(socket.id, user.roomName);
   });
 });
 
