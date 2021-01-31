@@ -6,7 +6,7 @@
 .input {
   border: none;
   border-radius: 0;
-  padding: 5%;
+  padding: 0 5%;
   width: 80%;
   font-size: 1.2em;
 }
@@ -24,8 +24,8 @@ select:focus {
   align-items: center;
   color: #fff !important;
   text-decoration: none;
+  font-weight: bold;
   background: #708a97;
-  padding: 20px;
   display: inline-block;
   border: none;
   width: 20%;

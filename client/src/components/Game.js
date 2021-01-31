@@ -94,7 +94,7 @@ const Game = ({ room, name, videoRoom, players }) => {
               >
                 <Player player={actorPlayer} />
               </div>
-            ) : ("no actorplayer found")}
+            ) : ("loading next round's actor ...")}
           </div>
           <div className="gameChat">
             <div className="gameChatWindow">
