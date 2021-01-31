@@ -32,7 +32,7 @@ const addUserToRoom = (id, name, room) => {
     if (userNames.includes(name)) {
       return { status: 2, message: "Username already taken" };
     } else {
-      if (roomUsers.length > maxUsers) {
+      if (roomUsers.length >= maxUsers) {
         return { status: 3, message: "Room is full" };
       }
       rooms.get(room).push(id);

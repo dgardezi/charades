@@ -54,13 +54,13 @@ const App = () => {
       }
     });
   }, [socketsCreated]);
-  
+
   const handleNameChange = useCallback((event) => {
     setName(event.target.value);
   }, []);
 
   const handleRoomChange = useCallback((event) => {
-    setRoom(event.target.value);
+    setRoom(event.target.value.trim().toUpperCase());
   }, []);
 
   const setStateLobby = (room, tok) => {
@@ -105,12 +105,7 @@ const App = () => {
     );
   } else {
     render = (
-      <Game
-        room={room}
-        name={name}
-        videoRoom={videoRoom}
-        players={players}
-      />
+      <Game room={room} name={name} videoRoom={videoRoom} players={players} />
     );
   }
 

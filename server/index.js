@@ -74,6 +74,8 @@ io.on("connect", (socket) => {
     if (correct) {
       //broadcast to rest of users points update
       //broadcast to correct user to reveal word
+      socket.emit("guessed", "true");
+
       io.to(user.roomName.toUpperCase()).emit("message", {
         user: "",
         text: `${user.userName} has guessed the word!`,

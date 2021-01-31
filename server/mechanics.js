@@ -133,6 +133,9 @@ const userGuess = (room, username, guess) => {
           gameData.currentWord.trim().toLowerCase()
         ) {
           gameData.guessedCorrectly.add(username);
+          if (gameData.guessedCorrectly.length === gameData.userPoints.length) {
+            gameData.timer = 0;
+          }
           return true;
         }
       }
