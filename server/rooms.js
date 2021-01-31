@@ -1,8 +1,6 @@
 const rooms = new Map(); // roomName: [userId]
 const users = new Map(); // userId: {userName, roomName}
 
-var _id = 0;
-
 const _formatUser = (userId) => {
   let obj = {};
   obj["userId"] = userId;
@@ -20,7 +18,7 @@ function _makeRoomCode(length) {
   return result;
 }
 
-const addUserToRoom = (name, room) => {
+const addUserToRoom = (id, name, room) => {
   name = name.trim().toLowerCase();
   room = room.trim().toLowerCase();
 
@@ -33,9 +31,8 @@ const addUserToRoom = (name, room) => {
     if (userNames.includes(name)) {
       return { status: 2, message: "Username already taken" };
     } else {
-      rooms.get(room).push(_id);
-      users.set(_id, { userName: name, roomName: room });
-      _id++;
+      rooms.get(room).push(id);
+      users.set(id, { userName: name, roomName: room });
 
       return { status: 0, message: "Success" };
     }
@@ -45,7 +42,7 @@ const addUserToRoom = (name, room) => {
 };
 
 const removeUserFromRoom = (id, room) => {
-  console.log('user removed')
+  console.log("user removed");
   room = room.trim().toLowerCase();
 
   if (rooms.has(room)) {

@@ -3,6 +3,8 @@ var app = express();
 var server = app.listen(3001);
 const socketio = require("socket.io");
 const cors = require("cors");
+const { videoToken } = require("./tokens");
+const config = require("./config");
 
 const {
   addUserToRoom,
@@ -22,6 +24,29 @@ app.use(router);
 
 io.on("connect", (socket) => {
   console.log("user connected");
+
+  socket.on("joinRoomQuery", ({ name, room }) => {
+    const response = addUserToRoom(socket.id, name, room);
+
+    const token = videoToken(name, room, config);
+
+    socket.emit("joinRoomResponse", { response, token: token.toJwt() });
+  });
+
+  socket.on("createRoomQuery", ({ name }) => {
+    console.log(`${name} tried to make a new room`);
+
+    const room = createRoom();
+    const response = addUserToRoom(socket.id, name, room);
+
+    const token = videoToken(name, room, config);
+
+    socket.emit("createRoomResponse", {
+      response,
+      room: room,
+      token: token.toJwt(),
+    });
+  });
 
   socket.on("disconnect", () => {
     console.log("user disconnected");

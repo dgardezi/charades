@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Video from "twilio-video";
-import { socket } from "../Socket";
 import Player from "./Player";
 
 import "./Lobby.css";
@@ -16,6 +15,7 @@ const Lobby = () => {
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
+    console.log(location.state);
     setName(location.state.name);
     setRoom(location.state.room);
     setToken(location.state.token);
