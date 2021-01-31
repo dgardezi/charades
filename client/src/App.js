@@ -42,7 +42,19 @@ const App = () => {
         alert(message);
       }
     });
+
+    socket.on("startGameResponse", ({ response }) => {
+      const { status, message } = response;
+      console.log("Success:", response);
+      if (status === 0) {
+        setState("game");
+      } else {
+        alert(message);
+      }
+    });
   }, [socketsCreated]);
+
+  
 
   const handleNameChange = useCallback((event) => {
     setName(event.target.value);
@@ -92,7 +104,12 @@ const App = () => {
       />
     );
   } else {
-    render = null;
+    render = (
+      <Game
+        room={room}
+        name={name}
+      />
+    );
   }
 
   return render;

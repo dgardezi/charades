@@ -17,7 +17,7 @@ const Home = ({ name, room, handleNameChange, handleRoomChange }) => {
     }
   };
 
-  const createRoom = async () => {
+  const createRoom = () => {
     if (name) {
       console.log("Trying to create new room");
       console.log(name);
@@ -27,8 +27,6 @@ const Home = ({ name, room, handleNameChange, handleRoomChange }) => {
         }
       });
     }
-
-    return false;
   };
 
   return (

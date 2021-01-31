@@ -3,7 +3,7 @@ import React from "react";
 import "./Game.css";
 import ChatBox from "./Chat/ChatBox";
 
-const Game = () => {
+const Game = ({room, name}) => {
   return (
     <div className="gameOuterContainer">
       <div className="gameInnerContainer">
@@ -27,7 +27,7 @@ const Game = () => {
           </div>
           <div className="gameChat">
             <div className="gameChatWindow">
-              <ChatBox />
+              <ChatBox room={room} name={name}/>
             </div>
           </div>
         </div>

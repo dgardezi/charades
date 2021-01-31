@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Player from "./Player";
+import { socket } from "../Socket";
 
 import "./Lobby.css";
 
@@ -30,6 +31,15 @@ const Lobby = ({
     </div>
   ));
 
+  const startGame = () => {
+    console.log("starting game");
+      socket.emit("startGameQuery", { room }, (error) => {
+        if (error) {
+          alert(error);
+        }
+      })
+  };
+
   return (
     <div className="lobbyOuterContainer">
       <div className="lobbyInnerContainer">
@@ -51,7 +61,7 @@ const Lobby = ({
         </div>
         <div className="startGame">
           <div className="startButtonLink">
-            <button className={"startButton"} type="submit">
+            <button onClick={startGame} className={"startButton"} type="submit">
               start game
             </button>
           </div>

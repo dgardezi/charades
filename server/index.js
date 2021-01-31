@@ -31,6 +31,7 @@ io.on("connect", (socket) => {
     const token = videoToken(name, room, config);
 
     socket.emit("joinRoomResponse", { response, token: token.toJwt() });
+    socket.join(room);
   });
 
   socket.on("createRoomQuery", ({ name }) => {
@@ -45,6 +46,17 @@ io.on("connect", (socket) => {
       response,
       room: room,
       token: token.toJwt(),
+    });
+    socket.join(room);
+  });
+
+  socket.on("startGameQuery", ({ room }) => {
+    console.log(`${room} trying to start game`);
+
+    const response = {status:0, message:"Success"};
+
+    io.in(room).emit("startGameResponse", {
+      response,
     });
   });
 
