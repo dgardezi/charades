@@ -41,7 +41,7 @@ const Game = ({ room, name, videoRoom, players }) => {
   const remotePlayers = players
     .filter((p) => p.identity !== actor)
     .map((player) => (
-      <div key="{player.id}" className="gameGuesser">
+      <div key={player.id} className="gameGuesser">
         <Player player={player} />
       </div>
     ));

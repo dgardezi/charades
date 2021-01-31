@@ -66,7 +66,7 @@ const Player = ({ player }) => {
     <div className="player">
       <h3>{player.identity}</h3>
       <video ref={videoRef} autoPlay={true} />
-      <audio ref={audioRef} autoPlay={true} muted={true} />
+      <audio ref={audioRef} autoPlay={true} muted={false} />
     </div>
   );
 };
