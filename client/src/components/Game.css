@@ -34,6 +34,11 @@ body {
   width: 90%;
 }
 
+.gameTimer {
+  color: white;
+  text-align: center;
+}
+
 .gameWord {
   display: flex;
   flex-direction: column;
@@ -46,6 +51,7 @@ body {
 
 .gameWord h1 {
   font-size: 3em;
+  text-align: center;
   color: white;
 }
 
@@ -81,15 +87,18 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 100%;
   padding: 0 2em 2em;
 }
 
 .gameGuesser {
-  background: #333e5a;
-  padding: 10px;
-  border-radius: 6px;
+  background: #708a97;
+  color: white;
+  padding: 5px;
+  border-radius: 4px 4px 0 0;
   display: inline-block;
-  margin-right: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .gameGuesser video {
@@ -97,7 +106,7 @@ body {
   max-width: 300px;
   display: block;
   margin: 0 auto;
-  border-radius: 6px;
+  border-radius: 4px 4px 0 0;
 }
 
 .gameActors {

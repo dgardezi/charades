@@ -83,10 +83,11 @@ const getUser = (userId) => {
 // };
 
 const createRoom = () => {
-  var roomCode = _makeRoomCode(4);
+  // var roomCode = _makeRoomCode(4);
+  var roomCode = "ABCD";
   while (rooms.has(roomCode)) {
-    console.log("Stuck");
-    roomCode = _makeRoomCode(4);
+    // roomCode = _makeRoomCode(4);
+    roomCode = "ABCD";
   }
   rooms.set(roomCode.toLowerCase(), new Array());
   return roomCode;
