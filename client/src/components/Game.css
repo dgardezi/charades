@@ -110,21 +110,42 @@ body {
 }
 
 .gameActors {
-  width: 160px;
+  /* width: 160px;
   height: 120px;
   background: white;
   width: 60%;
   height: 100%;
   margin-left: 25px;
-  margin-right: 25px;
+  margin-right: 25px; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 0 2em 2em;
 }
 
 .gameActor {
-  width: 160px;
+  /* width: 160px;
   height: 120px;
   background: white;
   width: 60%;
-  height: 100%;
+  height: 100%; */
+  background: #708a97;
+  color: white;
+  padding: 5px;
+  border-radius: 4px 4px 0 0;
+  display: inline-block;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.gameActor video {
+  width: 100%;
+  max-width: 300px;
+  display: block;
+  margin: 0 auto;
+  border-radius: 4px 4px 0 0;
 }
 
 .gameChat {

@@ -1,7 +1,6 @@
 const { words } = require("./words");
 const activeGames = new Map(); // { userPoints,currentOrder,currentActor,currentWord,timer,lastTimerUpdate
 const timeoutBetweenGames = 5000; //in milliseconds
-const { sendActor } = require("./index");
 const { io } = require("./socket.js");
 const currentTime = () => {
   return new Date().getTime();

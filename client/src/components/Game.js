@@ -9,6 +9,11 @@ const Game = ({ room, name, videoRoom, players }) => {
   const [actor, setActor] = useState("");
   const [word, setWord] = useState("");
   const [time, setTime] = useState(60);
+  const [actorPlayer, setActorPlayer] = useState(null);
+
+  const isActor = () => {
+    return actor.localeCompare(videoRoom.localParticipant.identity) === 0;
+  }
 
   useEffect(() => {
     socket.on("actor", ({ actor }) => {
@@ -27,7 +32,7 @@ const Game = ({ room, name, videoRoom, players }) => {
     });
   }, [socketsCreated]);
 
-  const remotePlayers = players.map((player) => (
+  const remotePlayers = players.filter((p) => p.identity !== actor).map((player) => (
     <div key="{player.id}" className="gameGuesser">
       <Player player={player} />
     </div>
@@ -42,6 +47,18 @@ const Game = ({ room, name, videoRoom, players }) => {
     return result.slice(0, -1);
   };
 
+  useEffect(() => {
+    if (actor === name) {
+      console.log("setting actor player to local participant");
+      setActorPlayer(videoRoom.localParticipant);
+    } else {
+      console.log("setting actor to remote participant");
+      setActorPlayer(players.filter((p) => p.identity === actor)[0]);
+    }
+    console.log(actorPlayer);
+  }, [actor]);
+
+  console.log(actorPlayer);
   return (
     <div className="gameOuterContainer">
       <div className="gameInnerContainer">
@@ -57,7 +74,7 @@ const Game = ({ room, name, videoRoom, players }) => {
 
         <div className="gameView">
           <div className="gameGuessers">
-            {videoRoom ? (
+            {videoRoom && actor !== name ? (
               <div
                 key="{videoRoom.localParticipant.sid}"
                 className="gameGuesser"
@@ -67,11 +84,17 @@ const Game = ({ room, name, videoRoom, players }) => {
             ) : (
               ""
             )}
-
             {remotePlayers}
           </div>
           <div className="gameActors">
-            <div className="gameActor"></div>
+            {actorPlayer ? (
+              <div
+                key="{actorPlayer.sid}"
+                className="gameActor"
+              >
+                <Player player={actorPlayer} />
+              </div>
+            ) : ("no actorplayer found")}
           </div>
           <div className="gameChat">
             <div className="gameChatWindow">
