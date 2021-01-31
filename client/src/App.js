@@ -1,8 +1,10 @@
-import React from "react";
-
+import React, { useState, useCallback } from "react";
+import Video from "twilio-video";
 import Home from "./components/Home";
 import Lobby from "./components/Lobby";
 import Game from "./components/Game";
+
+import { socket } from "./Socket";
 
 // import { MemoryRouter as Router, Route } from "react-router-dom";
 
@@ -13,14 +15,15 @@ const App = () => {
   const [videoRoom, setVideoRoom] = useState(null);
   const [players, setPlayers] = useState([]);
   const [state, setState] = useState("home");
+  const [connected, setConnected] = useState(false);
 
   socket.on("joinRoomResponse", ({ response, token }) => {
     const { status, message } = response;
     console.log("Success:", response);
     if (status === 0) {
-      console.log(name, room, token);
+      console.log("joinRoomResponse", name, room, token);
       setToken(token);
-      setState("lobby");
+      setStateLobby(token);
     } else {
       alert(message);
     }
@@ -29,14 +32,13 @@ const App = () => {
   socket.on("createRoomResponse", ({ response, room, token }) => {
     const { status, message } = response;
     console.log("Success:", response);
-    console.log(response, room, token);
+    console.log("createRoomResponse", room, token);
     if (status === 0) {
       setRoom(room);
       setToken(token);
-      setRoom(room);
-      setState("lobby");
+      setStateLobby(room, token);
     } else {
-      alert(errorMsg);
+      alert(message);
     }
   });
 
@@ -47,6 +49,28 @@ const App = () => {
   const handleRoomChange = useCallback((event) => {
     setRoom(event.target.value);
   }, []);
+
+  const setStateLobby = (room, tok) => {
+    if (!connected) {
+      setConnected(true);
+      console.log("setsStateLobby", room, tok);
+      Video.connect(tok, {
+        name: room,
+      }).then((r) => {
+        setVideoRoom(r);
+        setState("lobby");
+      });
+    }
+  };
+
+  const playerConnected = (player) => {
+    console.log("playerConnected", player);
+    setPlayers((prevPlayers) => [...prevPlayers, player]);
+  };
+
+  const playerDisconnected = (player) => {
+    setPlayers((prevPlayers) => prevPlayers.filter((p) => p !== player));
+  };
 
   let render;
   if (state === "home") {
@@ -59,10 +83,21 @@ const App = () => {
       />
     );
   } else if (state === "lobby") {
+    // render = (
+    //   <Lobby
+    //     room={room}
+    //     videoRoom={videoRoom}
+    //     players={players}
+    //     playerConnected={playerConnected}
+    //     playerDisconnected={playerDisconnected}
+    //   />
+    // );
     render = null;
   } else {
     render = null;
   }
+
+  return render;
 
   // return (
   //   <Router>

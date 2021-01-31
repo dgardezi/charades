@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-
+import { socket } from "../Socket";
 import "./Home.css";
 
 const url = "http://localhost:3001";
 
-const Home = (name, room, handleNameChange, handleRoomChange) => {
+const Home = ({ name, room, handleNameChange, handleRoomChange }) => {
   const joinRoom = async () => {
     const data = { name: name, room: room };
     if (name && room) {
-      console.log(room);
+      console.log(name, room);
       socket.emit("joinRoomQuery", { name, room }, (error) => {
         if (error) {
           alert(error);
@@ -19,10 +18,9 @@ const Home = (name, room, handleNameChange, handleRoomChange) => {
   };
 
   const createRoom = async () => {
-    const data = { name: name };
     if (name) {
       console.log("Trying to create new room");
-
+      console.log(name);
       socket.emit("createRoomQuery", { name }, (error) => {
         if (error) {
           alert(error);
@@ -53,17 +51,17 @@ const Home = (name, room, handleNameChange, handleRoomChange) => {
             type="text"
             onChange={handleRoomChange}
           />
-          <Link className="joinButtonLink" onClick={joinRoom} to="">
+          <div className="joinButtonLink" onClick={joinRoom}>
             <button className={"joinButton"} type="submit">
               join
             </button>
-          </Link>
+          </div>
         </div>
 
         <div className="createGame">
-          <Link className="createGameLink" onClick={createRoom} to="">
+          <div className="createGameLink" onClick={createRoom}>
             <p>create a game</p>
-          </Link>
+          </div>
         </div>
       </div>
     </div>

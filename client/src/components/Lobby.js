@@ -1,47 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import Video from "twilio-video";
 import Player from "./Player";
 
 import "./Lobby.css";
 
-const Lobby = () => {
-  const location = useLocation();
-
-  const [name, setName] = useState("");
-  const [room, setRoom] = useState("");
-  const [token, setToken] = useState("");
-  const [videoRoom, setVideoRoom] = useState(null);
-  const [players, setPlayers] = useState([]);
-
+const Lobby = ({
+  room,
+  videoRoom,
+  players,
+  playerConnected,
+  playerDisconnected,
+}) => {
   useEffect(() => {
-    console.log(location.state);
-    setName(location.state.name);
-    setRoom(location.state.room);
-    setToken(location.state.token);
-
-    if (token !== "") {
-      Video.connect(token, {
-        name: room,
-      })
-        .then((room) => {
-          setVideoRoom(room);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
-  }, [room, token]);
-
-  useEffect(() => {
-    const playerConnected = (player) => {
-      setPlayers((prevPlayers) => [...prevPlayers, player]);
-    };
-
-    const playerDisconnected = (player) => {
-      setPlayers((prevPlayers) => prevPlayers.filter((p) => p !== player));
-    };
-
     if (videoRoom) {
       videoRoom.on("participantConnected", playerConnected);
       videoRoom.on("participantDisconnected", playerDisconnected);
@@ -56,7 +25,7 @@ const Lobby = () => {
   }, [videoRoom]);
 
   const remotePlayers = players.map((player) => (
-    <div key="{player.id}" className="lobbyPlayer">
+    <div key={player.id} className="lobbyPlayer">
       <Player player={player} />
     </div>
   ));
@@ -81,11 +50,11 @@ const Lobby = () => {
           {remotePlayers}
         </div>
         <div className="startGame">
-          <Link to="/game" className="startButtonLink">
+          <div className="startButtonLink">
             <button className={"startButton"} type="submit">
               start game
             </button>
-          </Link>
+          </div>
         </div>
       </div>
     </div>
