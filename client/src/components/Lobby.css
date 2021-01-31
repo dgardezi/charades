@@ -61,19 +61,20 @@ body {
 }
 
 .lobbyPlayer {
-  background: #333e5a;
-  padding: 10px;
-  border-radius: 6px;
+  background: #708a97;
+  color: white;
+  padding: 5px;
+  border-radius: 4px 4px 0 0;
   display: inline-block;
   margin-right: 10px;
 }
 
-video {
+.lobbyPlayer video {
   width: 100%;
   max-width: 600px;
   display: block;
   margin: 0 auto;
-  border-radius: 6px;
+  border-radius: 4px 4px 0 0;
 }
 
 .startGame {
@@ -93,7 +94,7 @@ video {
   color: #fff !important;
   font-weight: bold;
   text-decoration: none;
-  background: #2979ff;
+  background: #708a97;
   padding: 15px 20px;
   border-radius: 5px;
   display: inline-block;

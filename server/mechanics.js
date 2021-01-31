@@ -81,12 +81,6 @@ const runGame = (room) => {
   }
 };
 
-createGame("ABCD", [
-  { userId: 1, userName: "user1" },
-  { userId: 2, userName: "user2" },
-  { userId: 3, userName: "user3" },
-]);
-
 const shuffle = (array) => {
   var currentIndex = array.length,
     temporaryValue,
@@ -114,14 +108,3 @@ const getRandomWord = () => {
 const addUserPoint = (username, room) => {
   activeGames.get(room).userPoints.get(username) += 50;
 };
-
-// const addGame = (room, users) => {};
-
-// const addGame = (room, users) => {};
-
-// const addGame = (room, users) => {};
-
-// const addGame = (room, users) => {};
-
-// const addGame = (room, users) => {};
-console.log(words);

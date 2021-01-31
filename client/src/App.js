@@ -47,15 +47,14 @@ const App = () => {
       const { status, message } = response;
       console.log("Success:", response);
       if (status === 0) {
+        socket.emit("startTimer");
         setState("game");
       } else {
         alert(message);
       }
     });
   }, [socketsCreated]);
-
   
-
   const handleNameChange = useCallback((event) => {
     setName(event.target.value);
   }, []);

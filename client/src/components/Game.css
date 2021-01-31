@@ -27,12 +27,16 @@ body {
 .gameInnerContainer {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   text-align: center;
   height: 100%;
   width: 90%;
-  margin-bottom: 70px;
+}
+
+.gameTimer {
+  color: white;
+  text-align: center;
 }
 
 .gameWord {
@@ -47,6 +51,7 @@ body {
 
 .gameWord h1 {
   font-size: 3em;
+  text-align: center;
   color: white;
 }
 
@@ -59,7 +64,7 @@ body {
   height: 100%;
 }
 
-.gameGuessers {
+/* .gameGuessers {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -75,6 +80,33 @@ body {
   background: white;
   margin-top: 5px;
   margin-bottom: 5px;
+} */
+
+.gameGuessers {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 0 2em 2em;
+}
+
+.gameGuesser {
+  background: #708a97;
+  color: white;
+  padding: 5px;
+  border-radius: 4px 4px 0 0;
+  display: inline-block;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.gameGuesser video {
+  width: 100%;
+  max-width: 300px;
+  display: block;
+  margin: 0 auto;
+  border-radius: 4px 4px 0 0;
 }
 
 .gameActors {
