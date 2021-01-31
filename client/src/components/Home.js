@@ -28,7 +28,7 @@ const Home = () => {
           if (status === 0) {
             history.push({
               pathname: "/lobby",
-              state: { name: name, room: room },
+              state: { name: name, room: room, token: data.token },
             });
           } else {
             setErrorMsg(message);
@@ -56,7 +56,7 @@ const Home = () => {
           if (status === 0) {
             history.push({
               pathname: "/lobby",
-              state: { name: name, room: data.room },
+              state: { name: name, room: data.room, token: data.token },
             });
           } else {
             setErrorMsg(message);
