@@ -33,9 +33,8 @@ const createGame = (room, users) => {
 
 const runGame = (room) => {
   if (activeGames.has(room)) {
-    if (activeGames.get(room).timer < 0) {
+    if (activeGames.get(room).timer <= 0) {
       if (!activeGames.get(room).revealed) {
-        // send reveal to everyone
         activeGames.get(room).revealed = true;
         activeGames.get(room).currentActor += 1;
       }
@@ -44,7 +43,7 @@ const runGame = (room) => {
         currentTime() - activeGames.get(room).lastTimerUpdate;
       var roomData = activeGames.get(room);
       if (timeSinceLastGame > timeoutBetweenGames) {
-        if (roomData.currentActor > roomData.currentOrder.length) {
+        if (roomData.currentActor >= roomData.currentOrder.length) {
           // Start new round
           // Get random order of actors
           roomData.currentOrder = shuffle(roomData.currentOrder);
@@ -59,10 +58,14 @@ const runGame = (room) => {
         roomData.currentWord = getRandomWord();
 
         //sendWord
+        var word = roomData.currentWord;
+        io.in(room).emit("word", { word });
 
         roomData.timer = 60;
 
         //send timer
+        var time = roomData.timer;
+        io.in(room).emit("timer", { time });
 
         roomData.lastTimerUpdate = currentTime();
         roomData.revealed = false;
@@ -76,6 +79,8 @@ const runGame = (room) => {
         activeGames.get(room).timer -= 1;
 
         // send update timer
+        var time = activeGames.get(room).timer;
+        io.in(room).emit("timer", { time });
 
         activeGames.get(room).lastTimerUpdate = currentTime();
       }

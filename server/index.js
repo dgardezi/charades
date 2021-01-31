@@ -66,24 +66,6 @@ io.on("connect", (socket) => {
     });
   });
 
-  socket.on("pickWord", ({ word }) => {
-    io.in("ABCD").emit("word", { word });
-  });
-
-  socket.on("startTimer", () => {
-    var time = 0;
-    var interval = setInterval(countdown, 1000);
-
-    function countdown() {
-      if (time > 60) {
-        clearInterval(interval);
-      } else {
-        io.in("ABCD").emit("timer", { time });
-        time++;
-      }
-    }
-  });
-
   socket.on("disconnect", () => {
     console.log("user disconnected");
     const user = getUser(socket.id);

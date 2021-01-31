@@ -17,11 +17,13 @@ const Game = ({ room, name, videoRoom, players }) => {
     });
 
     socket.on("word", ({ word }) => {
+      console.log("current word: ", word);
       setWord(word);
     });
 
     socket.on("timer", ({ time }) => {
-      setTime(60 - time);
+      console.log("current timer: ", time);
+      setTime(time);
     });
   }, [socketsCreated]);
 
@@ -44,10 +46,10 @@ const Game = ({ room, name, videoRoom, players }) => {
     <div className="gameOuterContainer">
       <div className="gameInnerContainer">
         <div className="gameWord">
-          {actor === name ? (
-            <h1>{"pie pie"}</h1>
+          {actor === name || time === 0 ? (
+            <h1>{word}</h1>
           ) : (
-            <h1>{getWordHint("pie pie")}</h1>
+            <h1>{getWordHint(word)}</h1>
           )}
         </div>
 
