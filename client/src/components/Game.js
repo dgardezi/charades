@@ -11,6 +11,7 @@ const Game = () => {
           <h1>_ _ _ _ _ _ _</h1>
         </div>
 
+        {/* ANCHOR LOADING BAR TO TOP OF GAMEVIEW */}
         <div className="gameView">
           <div className="gameGuessers">
             <div className="gameGuesser"></div>
