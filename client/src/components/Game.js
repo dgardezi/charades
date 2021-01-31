@@ -10,10 +10,11 @@ const Game = ({ room, name, videoRoom, players }) => {
   const [word, setWord] = useState("");
   const [time, setTime] = useState(60);
   const [actorPlayer, setActorPlayer] = useState(null);
+  const [guessedWord, setGuessedWord] = useState(false);
 
   const isActor = () => {
     return actor.localeCompare(videoRoom.localParticipant.identity) === 0;
-  }
+  };
 
   useEffect(() => {
     socket.on("actor", ({ actor }) => {
@@ -30,13 +31,20 @@ const Game = ({ room, name, videoRoom, players }) => {
       console.log("current timer: ", time);
       setTime(time);
     });
+
+    socket.on("guessed", ({ guessed }) => {
+      console.log("guessed word!");
+      setGuessedWord(true);
+    });
   }, [socketsCreated]);
 
-  const remotePlayers = players.filter((p) => p.identity !== actor).map((player) => (
-    <div key="{player.id}" className="gameGuesser">
-      <Player player={player} />
-    </div>
-  ));
+  const remotePlayers = players
+    .filter((p) => p.identity !== actor)
+    .map((player) => (
+      <div key="{player.id}" className="gameGuesser">
+        <Player player={player} />
+      </div>
+    ));
 
   const getWordHint = (word) => {
     var result = "";
@@ -63,7 +71,7 @@ const Game = ({ room, name, videoRoom, players }) => {
     <div className="gameOuterContainer">
       <div className="gameInnerContainer">
         <div className="gameWord">
-          {actor === name || time === 0 ? (
+          {actor === name || time === 0 || guessedWord ? (
             <h1>{word}</h1>
           ) : (
             <h1>{getWordHint(word)}</h1>
@@ -88,13 +96,12 @@ const Game = ({ room, name, videoRoom, players }) => {
           </div>
           <div className="gameActors">
             {actorPlayer ? (
-              <div
-                key="{actorPlayer.sid}"
-                className="gameActor"
-              >
+              <div key="{actorPlayer.sid}" className="gameActor">
                 <Player player={actorPlayer} />
               </div>
-            ) : ("loading next round's actor ...")}
+            ) : (
+              "loading next round's actor ..."
+            )}
           </div>
           <div className="gameChat">
             <div className="gameChatWindow">

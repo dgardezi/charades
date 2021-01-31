@@ -12,7 +12,12 @@ const {
   closeRoom,
 } = require("./rooms");
 
-const { createGame } = require("./mechanics");
+const {
+  createGame,
+  userGuess,
+  addUserPoint,
+  isSpoiler,
+} = require("./mechanics");
 
 io.on("connect", (socket) => {
   console.log("user connected");
@@ -60,10 +65,29 @@ io.on("connect", (socket) => {
     const user = getUser(socket.id);
     console.log(user);
 
-    io.to(user.roomName.toUpperCase()).emit("message", {
-      user: user.userName,
-      text: message,
-    });
+    // Check if they have an active running game
+    // if yes, check if they have already guessed the word
+    // if no
+    // they guessed correctly
+    var correct = userGuess(user.roomName, user.userName, message);
+
+    if (correct) {
+      //broadcast to rest of users points update
+      //broadcast to correct user to reveal word
+      socket.emit("guessed", "true");
+
+      io.to(user.roomName.toUpperCase()).emit("message", {
+        user: "",
+        text: `${user.userName} has guessed the word!`,
+      });
+    } else {
+      if (!isSpoiler(user.roomName, message)) {
+        io.to(user.roomName.toUpperCase()).emit("message", {
+          user: user.userName,
+          text: message,
+        });
+      }
+    }
   });
 
   socket.on("disconnect", () => {

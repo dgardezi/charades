@@ -1,5 +1,6 @@
 const rooms = new Map(); // roomName: [userId]
 const users = new Map(); // userId: {userName, roomName}
+const maxUsers = 6;
 
 const _formatUser = (userId) => {
   let obj = {};
@@ -31,6 +32,9 @@ const addUserToRoom = (id, name, room) => {
     if (userNames.includes(name)) {
       return { status: 2, message: "Username already taken" };
     } else {
+      if (roomUsers.length >= maxUsers) {
+        return { status: 3, message: "Room is full" };
+      }
       rooms.get(room).push(id);
       users.set(id, { userName: name, roomName: room });
 

@@ -1,5 +1,5 @@
 const { words } = require("./words");
-const activeGames = new Map(); // { userPoints,currentOrder,currentActor,currentWord,timer,lastTimerUpdate
+const activeGames = new Map(); // { userPoints,currentOrder,currentActor,currentWord,timer,lastTimerUpdate, guessedCorrectly
 const timeoutBetweenGames = 5000; //in milliseconds
 const { io } = require("./socket.js");
 const currentTime = () => {
@@ -16,6 +16,7 @@ const createGame = (room, users) => {
   var timer = -1;
   var lastTimerUpdate = currentTime();
   var revealed = false;
+  var guessedCorrectly = null; // Set of players who have guessed the word
 
   activeGames.set(room, {
     userPoints,
@@ -25,6 +26,7 @@ const createGame = (room, users) => {
     timer,
     lastTimerUpdate,
     revealed,
+    guessedCorrectly,
   });
 
   var running = setInterval(runGame, 100, room);
@@ -60,6 +62,8 @@ const runGame = (room) => {
         var word = roomData.currentWord;
         io.in(room).emit("word", { word });
 
+        roomData.guessedCorrectly = new Set();
+
         roomData.timer = 60;
 
         //send timer
@@ -68,8 +72,6 @@ const runGame = (room) => {
 
         roomData.lastTimerUpdate = currentTime();
         roomData.revealed = false;
-      } else {
-        console.log("waiting between games: ", timeSinceLastGame);
       }
     } else {
       var timeSinceLastUpdate =
@@ -83,8 +85,6 @@ const runGame = (room) => {
 
         activeGames.get(room).lastTimerUpdate = currentTime();
       }
-
-      console.log(activeGames.get(room));
     }
   } else {
     clearInterval(running);
@@ -115,8 +115,50 @@ const getRandomWord = () => {
   return words[Math.floor(Math.random() * words.length)];
 };
 
+const gameActive = (room) => {
+  return activeGames.has(room);
+};
+
+const userGuess = (room, username, guess) => {
+  var r = room.toUpperCase();
+  if (activeGames.has(r)) {
+    var gameData = activeGames.get(r);
+    if (
+      gameData.userPoints.has(username) &&
+      gameData.currentOrder[gameData.currentActor] != username
+    ) {
+      if (!gameData.guessedCorrectly.has(username)) {
+        if (
+          guess.trim().toLowerCase() ===
+          gameData.currentWord.trim().toLowerCase()
+        ) {
+          gameData.guessedCorrectly.add(username);
+          if (gameData.guessedCorrectly.length === gameData.userPoints.length) {
+            gameData.timer = 0;
+          }
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+};
+
+const isSpoiler = (room, message) => {
+  var r = room.toUpperCase();
+  console.log(room, message, activeGames);
+  if (activeGames.has(r)) {
+    var gameData = activeGames.get(r);
+
+    if (gameData.currentWord.toLowerCase() === message.trim().toLowerCase()) {
+      return true;
+    }
+  }
+  return false;
+};
+
 const addUserPoint = (username, room) => {
   activeGames.get(room).userPoints.get(username) += 50;
 };
 
-module.exports = { createGame };
+module.exports = { createGame, userGuess, addUserPoint, isSpoiler };
