@@ -109,6 +109,8 @@ const App = () => {
       <Game
         room={room}
         name={name}
+        videoRoom={videoRoom}
+        players={players}
       />
     );
   }
