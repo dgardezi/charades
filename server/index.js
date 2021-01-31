@@ -15,6 +15,8 @@ const {
   closeRoom,
 } = require("./rooms");
 
+const mecahnics = require("./mechanics");
+
 const router = require("./router");
 
 const io = socketio(server);
