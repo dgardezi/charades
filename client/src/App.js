@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Video from "twilio-video";
 import Home from "./components/Home";
 import Lobby from "./components/Lobby";
@@ -15,32 +15,34 @@ const App = () => {
   const [videoRoom, setVideoRoom] = useState(null);
   const [players, setPlayers] = useState([]);
   const [state, setState] = useState("home");
-  const [connected, setConnected] = useState(false);
+  const [socketsCreated, setSocketsCreated] = useState(false);
 
-  socket.on("joinRoomResponse", ({ response, token }) => {
-    const { status, message } = response;
-    console.log("Success:", response);
-    if (status === 0) {
-      console.log("joinRoomResponse", name, room, token);
-      setToken(token);
-      setStateLobby(token);
-    } else {
-      alert(message);
-    }
-  });
+  useEffect(() => {
+    socket.on("joinRoomResponse", ({ response, token }) => {
+      const { status, message } = response;
+      console.log("Success:", response);
+      if (status === 0) {
+        console.log("joinRoomResponse", name, room, token);
+        setToken(token);
+        setStateLobby(room, token);
+      } else {
+        alert(message);
+      }
+    });
 
-  socket.on("createRoomResponse", ({ response, room, token }) => {
-    const { status, message } = response;
-    console.log("Success:", response);
-    console.log("createRoomResponse", room, token);
-    if (status === 0) {
-      setRoom(room);
-      setToken(token);
-      setStateLobby(room, token);
-    } else {
-      alert(message);
-    }
-  });
+    socket.on("createRoomResponse", ({ response, room, token }) => {
+      const { status, message } = response;
+      console.log("Success:", response);
+      console.log("createRoomResponse", room, token);
+      if (status === 0) {
+        setRoom(room);
+        setToken(token);
+        setStateLobby(room, token);
+      } else {
+        alert(message);
+      }
+    });
+  }, [socketsCreated]);
 
   const handleNameChange = useCallback((event) => {
     setName(event.target.value);
@@ -51,16 +53,13 @@ const App = () => {
   }, []);
 
   const setStateLobby = (room, tok) => {
-    if (!connected) {
-      setConnected(true);
-      console.log("setsStateLobby", room, tok);
-      Video.connect(tok, {
-        name: room,
-      }).then((r) => {
-        setVideoRoom(r);
-        setState("lobby");
-      });
-    }
+    console.log("setsStateLobby", room, tok);
+    Video.connect(tok, {
+      name: room,
+    }).then((r) => {
+      setVideoRoom(r);
+      setState("lobby");
+    });
   };
 
   const playerConnected = (player) => {
@@ -83,16 +82,15 @@ const App = () => {
       />
     );
   } else if (state === "lobby") {
-    // render = (
-    //   <Lobby
-    //     room={room}
-    //     videoRoom={videoRoom}
-    //     players={players}
-    //     playerConnected={playerConnected}
-    //     playerDisconnected={playerDisconnected}
-    //   />
-    // );
-    render = null;
+    render = (
+      <Lobby
+        room={room}
+        videoRoom={videoRoom}
+        players={players}
+        playerConnected={playerConnected}
+        playerDisconnected={playerDisconnected}
+      />
+    );
   } else {
     render = null;
   }

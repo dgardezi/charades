@@ -25,7 +25,7 @@ const Lobby = ({
   }, [videoRoom]);
 
   const remotePlayers = players.map((player) => (
-    <div key={player.id} className="lobbyPlayer">
+    <div key="{player.id}" className="lobbyPlayer">
       <Player player={player} />
     </div>
   ));
