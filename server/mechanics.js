@@ -1,7 +1,8 @@
 const { words } = require("./words");
 const activeGames = new Map(); // { userPoints,currentOrder,currentActor,currentWord,timer,lastTimerUpdate
 const timeoutBetweenGames = 5000; //in milliseconds
-
+const { sendActor } = require("./index");
+const { io } = require("./socket.js");
 const currentTime = () => {
   return new Date().getTime();
 };
@@ -36,19 +37,24 @@ const runGame = (room) => {
       if (!activeGames.get(room).revealed) {
         // send reveal to everyone
         activeGames.get(room).revealed = true;
+        activeGames.get(room).currentActor += 1;
       }
       // Wait for time to pass before starting game
       var timeSinceLastGame =
         currentTime() - activeGames.get(room).lastTimerUpdate;
-
+      var roomData = activeGames.get(room);
       if (timeSinceLastGame > timeoutBetweenGames) {
-        var roomData = activeGames.get(room);
-        // Start new game
-        // Get random order of actors
-        roomData.currentOrder = shuffle(roomData.currentOrder);
-        roomData.currentActor = 0;
+        if (roomData.currentActor > roomData.currentOrder.length) {
+          // Start new round
+          // Get random order of actors
+          roomData.currentOrder = shuffle(roomData.currentOrder);
+          roomData.currentActor = 0;
+        }
 
         //sendActor
+        var actor = roomData.currentOrder[roomData.currentActor];
+        console.log("sending actor: ", actor);
+        io.in(room).emit("actor", { actor });
 
         roomData.currentWord = getRandomWord();
 
@@ -108,3 +114,5 @@ const getRandomWord = () => {
 const addUserPoint = (username, room) => {
   activeGames.get(room).userPoints.get(username) += 50;
 };
+
+module.exports = { createGame };

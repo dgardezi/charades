@@ -12,6 +12,7 @@ const Game = ({ room, name, videoRoom, players }) => {
 
   useEffect(() => {
     socket.on("actor", ({ actor }) => {
+      console.log("current actor: ", actor);
       setActor(actor);
     });
 

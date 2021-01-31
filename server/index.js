@@ -1,10 +1,7 @@
-var express = require("express");
-var app = express();
-var server = app.listen(3001);
-const socketio = require("socket.io");
-const cors = require("cors");
 const { videoToken } = require("./tokens");
 const config = require("./config");
+
+const { io } = require("./socket");
 
 const {
   addUserToRoom,
@@ -15,14 +12,7 @@ const {
   closeRoom,
 } = require("./rooms");
 
-const mecahnics = require("./mechanics");
-
-const router = require("./router");
-
-const io = socketio(server);
-
-app.use(cors());
-app.use(router);
+const { createGame } = require("./mechanics");
 
 io.on("connect", (socket) => {
   console.log("user connected");
@@ -55,6 +45,9 @@ io.on("connect", (socket) => {
   socket.on("startGameQuery", ({ room }) => {
     console.log(`${room} trying to start game`);
 
+    var users = getUsersFromRoom(room);
+    console.log("creating game: ", room, users);
+    createGame(room, users);
     const response = { status: 0, message: "Success" };
 
     io.in(room).emit("startGameResponse", {
@@ -71,10 +64,6 @@ io.on("connect", (socket) => {
       user: user.userName,
       text: message,
     });
-  });
-
-  socket.on("pickActor", ({ actor }) => {
-    io.in("ABCD").emit("actor", { actor });
   });
 
   socket.on("pickWord", ({ word }) => {
@@ -105,41 +94,3 @@ io.on("connect", (socket) => {
 });
 
 console.log("server running on port 3001");
-
-// console.log(createRoom("hey").message + " expected: Success");
-// console.log(createRoom("hey").message + " expected: Room Already Exists");
-// console.log(createRoom("hello").message + " expected: Success");
-
-// console.log(addUserToRoom(1, "Duncan", "hey").message + " expected: Success");
-// console.log(addUserToRoom(2, "Griffin", "hey").message + " expected: Success");
-// console.log(
-//   addUserToRoom(3, "Duncan", "hey").message + " expected: Username taken"
-// );
-// console.log(addUserToRoom(3, "Duncan", "hello").message + " expected: Success");
-
-// console.log(
-//   removeUserFromRoom(2, "hello").message +
-//     " expected: User does not exist in room"
-// );
-// console.log(removeUserFromRoom(3, "hello").message + " expected: Success");
-// console.log(
-//   removeUserFromRoom(2, "abc").message + " expected: Room does not exist"
-// );
-
-// console.log(
-//   getUsersFromRoom("hello").map(
-//     (user) => `{${user.userId}, ${user.userName}}`
-//   ) + " expected: []"
-// );
-// console.log(
-//   getUsersFromRoom("hey").map((user) => `{${user.userId}, ${user.userName}}`) +
-//     " expected: [{1, Duncan}, {2, Griffin}]"
-// );
-
-// console.log(getUser(1) + " expected: {duncan, hey}");
-// console.log(getUser(2) + " expected: {griffin, hey}");
-// console.log(getUser(3) + " expected: null");
-
-// console.log(closeRoom("hey").message + " expected: sucess");
-// console.log(closeRoom("abc").message + " expected: room does not exist");
-// console.log(getUser(1) + " expected: null");

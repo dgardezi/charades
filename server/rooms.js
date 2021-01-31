@@ -63,8 +63,9 @@ const removeUserFromRoom = (id, room) => {
 };
 
 const getUsersFromRoom = (roomName) => {
-  if (rooms.has(roomName)) {
-    return rooms.get(roomName).map(_formatUser);
+  var room = roomName.trim().toLowerCase();
+  if (rooms.has(room)) {
+    return rooms.get(room).map(_formatUser);
   } else {
     return null;
   }
@@ -83,11 +84,9 @@ const getUser = (userId) => {
 // };
 
 const createRoom = () => {
-  // var roomCode = _makeRoomCode(4);
-  var roomCode = "ABCD";
+  var roomCode = _makeRoomCode(4);
   while (rooms.has(roomCode)) {
-    // roomCode = _makeRoomCode(4);
-    roomCode = "ABCD";
+    roomCode = _makeRoomCode(4);
   }
   rooms.set(roomCode.toLowerCase(), new Array());
   return roomCode;
