@@ -21,10 +21,15 @@ app.use(cors());
 app.use(router);
 
 io.on("connect", (socket) => {
-  console.log("User Connected");
+  console.log("user connected");
+
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+    const user = getUser(socket.id);
+  });
 });
 
-console.log("Server is running");
+console.log("server running on port 3001");
 
 // console.log(createRoom("hey").message + " expected: Success");
 // console.log(createRoom("hey").message + " expected: Room Already Exists");

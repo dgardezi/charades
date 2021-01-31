@@ -1,6 +1,7 @@
 import React from "react";
 
 import "./Game.css";
+import ChatBox from "./Chat/ChatBox";
 
 const Game = () => {
   return (
@@ -27,7 +28,7 @@ const Game = () => {
           </div>
           <div className="gameChat">
             <div className="gameChatWindow">
-              <p>chat window</p>
+              <ChatBox />
             </div>
           </div>
         </div>

@@ -45,6 +45,7 @@ const addUserToRoom = (name, room) => {
 };
 
 const removeUserFromRoom = (id, room) => {
+  console.log('user removed')
   room = room.trim().toLowerCase();
 
   if (rooms.has(room)) {
@@ -52,6 +53,9 @@ const removeUserFromRoom = (id, room) => {
     if (index > -1) {
       rooms.get(room).splice(index, 1);
       users.delete(id);
+      if (rooms.get(room) === []) {
+        closeRoom(room);
+      }
       return { status: 0, message: "Success" };
     } else {
       return { status: 2, message: "User does not exist in room" };
