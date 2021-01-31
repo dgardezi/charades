@@ -60,6 +60,12 @@ io.on("connect", (socket) => {
     });
   });
 
+  socket.on('sendMessage', ({message}) => {
+    const user = getUser(socket.id);
+
+    io.to(user.room).emit('message', { user: user.name, text: message });
+  });
+
   socket.on("disconnect", () => {
     console.log("user disconnected");
     const user = getUser(socket.id);
