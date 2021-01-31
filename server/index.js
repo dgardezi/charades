@@ -1,7 +1,6 @@
 var express = require("express");
 var app = express();
-var server = app.listen(3000);
-
+var server = app.listen(3001);
 const socketio = require("socket.io");
 const cors = require("cors");
 
@@ -13,6 +12,17 @@ const {
   getUser,
   closeRoom,
 } = require("./rooms");
+
+const router = require("./router");
+
+const io = socketio(server);
+
+app.use(cors());
+app.use(router);
+
+io.on("connect", (socket) => {
+  console.log("User Connected");
+});
 
 console.log("Server is running");
 

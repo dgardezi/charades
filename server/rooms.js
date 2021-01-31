@@ -1,16 +1,31 @@
 const rooms = new Map(); // roomName: [userId]
 const users = new Map(); // userId: {userName, roomName}
 
-const formatUser = (userId) => {
+var _id = 0;
+
+const _formatUser = (userId) => {
   let obj = {};
   obj["userId"] = userId;
   obj["userName"] = users.get(userId).userName;
   return obj;
 };
 
-const addUserToRoom = (id, name, room) => {
+function _makeRoomCode(length) {
+  var result = "";
+  var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
+const addUserToRoom = (name, room) => {
   name = name.trim().toLowerCase();
   room = room.trim().toLowerCase();
+
+  console.log(rooms);
+  console.log(room);
 
   if (rooms.has(room)) {
     const roomUsers = rooms.get(room);
@@ -18,8 +33,9 @@ const addUserToRoom = (id, name, room) => {
     if (userNames.includes(name)) {
       return { status: 2, message: "Username already taken" };
     } else {
-      rooms.get(room).push(id);
-      users.set(id, { userName: name, roomName: room });
+      rooms.get(room).push(_id);
+      users.set(_id, { userName: name, roomName: room });
+      _id++;
 
       return { status: 0, message: "Success" };
     }
@@ -47,7 +63,7 @@ const removeUserFromRoom = (id, room) => {
 
 const getUsersFromRoom = (roomName) => {
   if (rooms.has(roomName)) {
-    return rooms.get(roomName).map(formatUser);
+    return rooms.get(roomName).map(_formatUser);
   } else {
     return null;
   }
@@ -65,15 +81,14 @@ const getUser = (userId) => {
 
 // };
 
-const createRoom = (roomName) => {
-  roomName = roomName.trim().toLowerCase();
-
-  if (!rooms.has(roomName)) {
-    rooms.set(roomName, new Array());
-    return { status: 0, message: "Success" };
-  } else {
-    return { status: 1, message: "Room already exists" };
+const createRoom = () => {
+  var roomCode = _makeRoomCode(4);
+  while (rooms.has(roomCode)) {
+    console.log("Stuck");
+    roomCode = _makeRoomCode(4);
   }
+  rooms.set(roomCode.toLowerCase(), new Array());
+  return roomCode;
 };
 
 const closeRoom = (roomName) => {

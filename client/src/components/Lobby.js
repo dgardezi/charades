@@ -1,16 +1,26 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { socket } from "../Socket";
 
 import "./Lobby.css";
 
 const Lobby = () => {
+  const location = useLocation();
+
+  const [name, setName] = useState("");
+  const [room, setRoom] = useState("");
+
+  useEffect(() => {
+    setName(location.state.name);
+    setRoom(location.state.room);
+  });
+
   return (
     <div className="lobbyOuterContainer">
       <div className="lobbyInnerContainer">
-
         <div className="lobbyHeader">
           <h1>charades.me</h1>
-          <h2>game code: abcd</h2>
+          <h2>game code: {room}</h2>
         </div>
 
         <div className="lobbyPlayers">
@@ -31,7 +41,6 @@ const Lobby = () => {
             </button>
           </Link>
         </div>
-
       </div>
     </div>
   );
