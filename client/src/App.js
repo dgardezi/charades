@@ -14,9 +14,54 @@ const App = () => {
   const [players, setPlayers] = useState([]);
   const [state, setState] = useState("home");
 
+  socket.on("joinRoomResponse", ({ response, token }) => {
+    const { status, message } = response;
+    console.log("Success:", response);
+    if (status === 0) {
+      console.log(name, room, token);
+      setToken(token);
+      setState("lobby");
+    } else {
+      alert(message);
+    }
+  });
+
+  socket.on("createRoomResponse", ({ response, room, token }) => {
+    const { status, message } = response;
+    console.log("Success:", response);
+    console.log(response, room, token);
+    if (status === 0) {
+      setRoom(room);
+      setToken(token);
+      setRoom(room);
+      setState("lobby");
+    } else {
+      alert(errorMsg);
+    }
+  });
+
+  const handleNameChange = useCallback((event) => {
+    setName(event.target.value);
+  }, []);
+
+  const handleRoomChange = useCallback((event) => {
+    setRoom(event.target.value);
+  }, []);
+
+  let render;
   if (state === "home") {
+    render = (
+      <Home
+        name={name}
+        room={room}
+        handleNameChange={handleNameChange}
+        handleRoomChange={handleRoomChange}
+      />
+    );
   } else if (state === "lobby") {
+    render = null;
   } else {
+    render = null;
   }
 
   // return (
