@@ -25,7 +25,8 @@ select:focus {
   color: #fff !important;
   text-decoration: none;
   font-weight: bold;
-  background: #708a97;
+  /* background: #708a97; */
+  background-color: #f87f7b;
   display: inline-block;
   border: none;
   width: 20%;
