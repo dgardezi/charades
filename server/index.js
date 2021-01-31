@@ -71,7 +71,9 @@ io.on("connect", (socket) => {
   socket.on("disconnect", () => {
     console.log("user disconnected");
     const user = getUser(socket.id);
-    removeUserFromRoom(socket.id, user.roomName);
+    if(user) {
+      removeUserFromRoom(socket.id, user.roomName);
+    };
   });
 });
 
