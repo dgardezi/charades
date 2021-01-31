@@ -21,7 +21,7 @@ const Game = ({room, name, videoRoom, players}) => {
 
   console.log(players);
   const remotePlayers = players.map((player) => (
-    <div key="{player.id}" className="lobbyPlayer">
+    <div key="{player.id}" className="gameGuesser">
       <Player player={player} />
     </div>
   ));
@@ -35,9 +35,10 @@ const Game = ({room, name, videoRoom, players}) => {
         </div>
 
         {/* ANCHOR LOADING BAR TO TOP OF GAMEVIEW */}
-        <div className="lobbyPlayers">
+        <div className="gameView">
+        <div className="gameGuessers">
           {videoRoom ? (
-            <div key="{videoRoom.localParticipant.sid}" className="lobbyPlayer">
+            <div key="{videoRoom.localParticipant.sid}" className="gameGuesser">
               <Player player={videoRoom.localParticipant} />
             </div>
           ) : (
@@ -46,17 +47,6 @@ const Game = ({room, name, videoRoom, players}) => {
 
           {remotePlayers}
         </div>
-        {/* <div className="gameView">
-          <div className="gameGuessers">
-
-            <div className="gameGuesser"></div>
-            <div className="gameGuesser"></div>
-            <div className="gameGuesser"></div>
-            <div className="gameGuesser"></div>
-            <div className="gameGuesser"></div>
-            <div className="gameGuesser"></div>
-            <div className="gameGuesser"></div>
-          </div>
           <div className="gameActors">
             <div className="gameActor"></div>
           </div>
@@ -65,7 +55,7 @@ const Game = ({room, name, videoRoom, players}) => {
               <ChatBox room={room} name={name}/>
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
     </div>
   );
