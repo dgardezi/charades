@@ -6,7 +6,7 @@ const ChatTextfield = ({ setMessage, sendMessage, message }) => (
     <input
       className="input"
       type="text"
-      placeholder="Type a message..."
+      placeholder="Make a guess ..."
       value={message}
       onChange={({ target: { value } }) => setMessage(value)}
       onKeyPress={(e) =>
