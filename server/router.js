@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const router = express.Router();
 router.use(express.json());
+const config = require("./config");
+const { videoToken } = require("./tokens");
 
 const {
   addUserToRoom,
@@ -20,7 +22,9 @@ router.get("/", (req, res) => {
 router.post("/joinRoom", (req, res) => {
   const { name, room } = req.body;
   const response = addUserToRoom(name, room);
-  res.send({ response }).status(200);
+
+  const token = videoToken(name, room, config);
+  res.send({ response, token: token.toJwt() }).status(200);
 });
 
 router.post("/createRoom", (req, res) => {
@@ -30,7 +34,9 @@ router.post("/createRoom", (req, res) => {
   const room = createRoom();
   const response = addUserToRoom(name, room);
 
-  res.send({ response, room }).status(200);
+  console.log(config);
+  const token = videoToken(name, room, config);
+  res.send({ response, room, token: token.toJwt() }).status(200);
 });
 
 module.exports = router;
