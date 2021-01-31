@@ -53,25 +53,30 @@ io.on("connect", (socket) => {
   socket.on("startGameQuery", ({ room }) => {
     console.log(`${room} trying to start game`);
 
-    const response = {status:0, message:"Success"};
+    const response = { status: 0, message: "Success" };
 
     io.in(room).emit("startGameResponse", {
       response,
     });
   });
 
-  socket.on('sendMessage', ({message}) => {
+  socket.on("sendMessage", ({ message }) => {
     console.log(message);
     const user = getUser(socket.id);
     console.log(user);
 
-    io.to(user.roomName.toUpperCase()).emit('message', { user: user.userName, text: message });
+    io.to(user.roomName.toUpperCase()).emit("message", {
+      user: user.userName,
+      text: message,
+    });
   });
 
   socket.on("disconnect", () => {
     console.log("user disconnected");
     const user = getUser(socket.id);
-    removeUserFromRoom(socket.id, user.roomName);
+    if (user) {
+      removeUserFromRoom(socket.id, user.roomName);
+    }
   });
 });
 
