@@ -41,7 +41,7 @@ const Game = ({ room, name, videoRoom, players }) => {
   const remotePlayers = players
     .filter((p) => p.identity !== actor)
     .map((player) => (
-      <div key="{player.id}" className="gameGuesser">
+      <div key={player.id} className="gameGuesser">
         <Player player={player} />
       </div>
     ));
@@ -65,8 +65,6 @@ const Game = ({ room, name, videoRoom, players }) => {
     }
     console.log(actorPlayer);
   }, [actor]);
-
-  console.log(actorPlayer);
   return (
     <div className="gameOuterContainer">
       <div className="gameInnerContainer">
@@ -83,10 +81,7 @@ const Game = ({ room, name, videoRoom, players }) => {
         <div className="gameView">
           <div className="gameGuessers">
             {videoRoom && actor !== name ? (
-              <div
-                key="{videoRoom.localParticipant.sid}"
-                className="gameGuesser"
-              >
+              <div key={videoRoom.localParticipant.sid} className="gameGuesser">
                 <Player player={videoRoom.localParticipant} />
               </div>
             ) : (
@@ -96,7 +91,7 @@ const Game = ({ room, name, videoRoom, players }) => {
           </div>
           <div className="gameActors">
             {actorPlayer ? (
-              <div key="{actorPlayer.sid}" className="gameActor">
+              <div key={actorPlayer.sid} className="gameActor">
                 <Player player={actorPlayer} />
               </div>
             ) : (
