@@ -20,7 +20,7 @@ function _makeRoomCode(length) {
 }
 
 const addUserToRoom = (id, name, room) => {
-  name = name.trim().toLowerCase();
+  // name = name.trim().toLowerCase();
   room = room.trim().toLowerCase();
 
   console.log(rooms);

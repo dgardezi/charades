@@ -26,18 +26,18 @@ const Lobby = ({
   }, [videoRoom]);
 
   const remotePlayers = players.map((player) => (
-    <div key="{player.id}" className="lobbyPlayer">
+    <div key={player.sid} className="lobbyPlayer">
       <Player player={player} />
     </div>
   ));
 
   const startGame = () => {
     console.log("starting game");
-      socket.emit("startGameQuery", { room }, (error) => {
-        if (error) {
-          alert(error);
-        }
-      })
+    socket.emit("startGameQuery", { room }, (error) => {
+      if (error) {
+        alert(error);
+      }
+    });
   };
 
   return (

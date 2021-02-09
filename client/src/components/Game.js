@@ -20,11 +20,13 @@ const Game = ({ room, name, videoRoom, players }) => {
     socket.on("actor", ({ actor }) => {
       console.log("current actor: ", actor);
       setActor(actor);
+      setGuessedWord(false);
     });
 
     socket.on("word", ({ word }) => {
       console.log("current word: ", word);
       setWord(word);
+      setGuessedWord(false);
     });
 
     socket.on("timer", ({ time }) => {
@@ -41,7 +43,7 @@ const Game = ({ room, name, videoRoom, players }) => {
   const remotePlayers = players
     .filter((p) => p.identity !== actor)
     .map((player) => (
-      <div key={player.id} className="gameGuesser">
+      <div key={player.sid} className="gameGuesser">
         <Player player={player} />
       </div>
     ));
@@ -56,15 +58,16 @@ const Game = ({ room, name, videoRoom, players }) => {
   };
 
   useEffect(() => {
-    if (actor === name) {
+    if (actor == name) {
       console.log("setting actor player to local participant");
       setActorPlayer(videoRoom.localParticipant);
-    } else {
+    } else if (actor !== "") {
       console.log("setting actor to remote participant");
       setActorPlayer(players.filter((p) => p.identity === actor)[0]);
     }
     console.log(actorPlayer);
   }, [actor]);
+
   return (
     <div className="gameOuterContainer">
       <div className="gameInnerContainer">

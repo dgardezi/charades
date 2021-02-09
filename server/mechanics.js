@@ -121,19 +121,30 @@ const gameActive = (room) => {
 
 const userGuess = (room, username, guess) => {
   var r = room.toUpperCase();
+
+  // If the room exists
   if (activeGames.has(r)) {
     var gameData = activeGames.get(r);
+
+    // If username exists in room and is not the current actor
     if (
       gameData.userPoints.has(username) &&
       gameData.currentOrder[gameData.currentActor] != username
     ) {
+      // If the user has not already guessed correctly
       if (!gameData.guessedCorrectly.has(username)) {
+        // If the guess is the same as the word
         if (
           guess.trim().toLowerCase() ===
           gameData.currentWord.trim().toLowerCase()
         ) {
           gameData.guessedCorrectly.add(username);
-          if (gameData.guessedCorrectly.length === gameData.userPoints.length) {
+          if (gameData.guessedCorrectly.size === gameData.userPoints.size - 1) {
+            console.log(
+              `Users Guessed Correctly: ${gameData.guessedCorrectly.size} \n 
+              Total Users Guessing: ${gameData.userPoints.size - 1} \n 
+              All users have guessed, setting timer to 0`
+            );
             gameData.timer = 0;
           }
           return true;
