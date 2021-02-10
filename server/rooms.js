@@ -54,7 +54,7 @@ const removeUserFromRoom = (id, room) => {
     if (index > -1) {
       rooms.get(room).splice(index, 1);
       users.delete(id);
-      if (rooms.get(room) === []) {
+      if (rooms.get(room).length == 0) {
         closeRoom(room);
       }
       return { status: 0, message: "Success" };
@@ -83,9 +83,14 @@ const getUser = (userId) => {
   }
 };
 
-// const getRooms = () => {
-
-// };
+const isRoomOpen = (roomName) => {
+  var room = roomName.trim().toLowerCase();
+  if (rooms.has(room)) {
+    return true;
+  } else {
+    return false;
+  }
+};
 
 const createRoom = () => {
   var roomCode = _makeRoomCode(4);
@@ -97,6 +102,7 @@ const createRoom = () => {
 };
 
 const closeRoom = (roomName) => {
+  console.log(`Closing Room ${roomName}`);
   if (rooms.has(roomName)) {
     // Remove all users in roomName
     const roomUsers = rooms.get(roomName);
@@ -117,4 +123,5 @@ module.exports = {
   getUsersFromRoom,
   getUser,
   closeRoom,
+  isRoomOpen,
 };

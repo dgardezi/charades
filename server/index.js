@@ -10,6 +10,7 @@ const {
   getUsersFromRoom,
   getUser,
   closeRoom,
+  isRoomOpen,
 } = require("./rooms");
 
 const {
@@ -17,6 +18,8 @@ const {
   userGuess,
   addUserPoint,
   isSpoiler,
+  endGame,
+  removeUserFromGame,
 } = require("./mechanics");
 
 io.on("connect", (socket) => {
@@ -27,7 +30,11 @@ io.on("connect", (socket) => {
 
     const token = videoToken(name, room, config);
 
-    socket.emit("joinRoomResponse", { response, token: token.toJwt() });
+    socket.emit("joinRoomResponse", {
+      response,
+      room: room,
+      token: token.toJwt(),
+    });
     socket.join(room);
   });
 
@@ -39,7 +46,7 @@ io.on("connect", (socket) => {
 
     const token = videoToken(name, room, config);
 
-    socket.emit("createRoomResponse", {
+    socket.emit("joinRoomResponse", {
       response,
       room: room,
       token: token.toJwt(),
@@ -95,6 +102,7 @@ io.on("connect", (socket) => {
     const user = getUser(socket.id);
     if (user) {
       removeUserFromRoom(socket.id, user.roomName);
+      removeUserFromGame(user.roomName, user.userName);
     }
   });
 });

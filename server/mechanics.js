@@ -29,10 +29,62 @@ const createGame = (room, users) => {
     guessedCorrectly,
   });
 
-  var running = setInterval(runGame, 100, room);
+  // The thread id to be used to close the game
+  var gameId = setInterval(runGame, 100, room);
+  activeGames.get(room).gameId = gameId;
+};
+
+const endGame = (room) => {
+  room = room.toUpperCase();
+  if (activeGames.has(room)) {
+    console.log(`Ending game for room ${room}`);
+    clearInterval(activeGames.get(room).gameId);
+    activeGames.delete(room);
+  }
+};
+
+const addUser = (room, username) => {
+  room = room.toUpperCase();
+  if (activeGames.has(room)) {
+    var roomData = activeGames.get(room);
+    if (!roomData.userPoints.has(username)) {
+      console.log(`Adding ${username} to ${room}!`);
+      roomData.userPoints.set(username, 0);
+      roomData.currentOrder.push(username);
+    }
+  }
+};
+
+const removeUserFromGame = (room, username) => {
+  room = room.toUpperCase();
+  if (activeGames.has(room)) {
+    var roomData = activeGames.get(room);
+    var isActor = roomData.currentOrder[roomData.currentActor] === username;
+
+    if (roomData.userPoints.has(username)) {
+      // Remove user from users with points and actor candidates
+      console.log(`Removing ${username} from ${room}`);
+      roomData.userPoints.delete(username);
+      const index = roomData.currentOrder.indexOf(username);
+      if (index > -1) {
+        roomData.currentOrder.splice(index, 1);
+      }
+
+      // If user leaves as the current actor, end the turn
+      if (isActor) {
+        roomData.timer = 0;
+      }
+    }
+
+    // If lastUser in room, endGame
+    if (roomData.userPoints.size === 0) {
+      endGame(room);
+    }
+  }
 };
 
 const runGame = (room) => {
+  room.toUpperCase();
   if (activeGames.has(room)) {
     if (activeGames.get(room).timer <= 0) {
       if (!activeGames.get(room).revealed) {
@@ -87,7 +139,7 @@ const runGame = (room) => {
       }
     }
   } else {
-    clearInterval(running);
+    console.log("An unexpected error has occured while running game.");
   }
 };
 
@@ -161,7 +213,9 @@ const isSpoiler = (room, message) => {
   if (activeGames.has(r)) {
     var gameData = activeGames.get(r);
 
-    if (gameData.currentWord.toLowerCase() === message.trim().toLowerCase()) {
+    if (
+      message.trim().toLowerCase().includes(gameData.currentWord.toLowerCase())
+    ) {
       return true;
     }
   }
@@ -172,4 +226,11 @@ const addUserPoint = (username, room) => {
   activeGames.get(room).userPoints.get(username) += 50;
 };
 
-module.exports = { createGame, userGuess, addUserPoint, isSpoiler };
+module.exports = {
+  createGame,
+  userGuess,
+  addUserPoint,
+  isSpoiler,
+  endGame,
+  removeUserFromGame,
+};

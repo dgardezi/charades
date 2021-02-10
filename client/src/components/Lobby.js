@@ -1,30 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Player from "./Player";
 import { socket } from "../Socket";
 
 import "./Lobby.css";
 
-const Lobby = ({
-  room,
-  videoRoom,
-  players,
-  playerConnected,
-  playerDisconnected,
-}) => {
-  useEffect(() => {
-    if (videoRoom) {
-      videoRoom.on("participantConnected", playerConnected);
-      videoRoom.on("participantDisconnected", playerDisconnected);
-      videoRoom.participants.forEach(playerConnected);
-    }
-    return () => {
-      if (videoRoom) {
-        videoRoom.off("participantConnected", playerConnected);
-        videoRoom.off("participantDisconnected", playerDisconnected);
-      }
-    };
-  }, [videoRoom]);
-
+const Lobby = ({ room, videoRoom, players }) => {
   const remotePlayers = players.map((player) => (
     <div key={player.sid} className="lobbyPlayer">
       <Player player={player} />

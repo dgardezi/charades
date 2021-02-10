@@ -5,16 +5,11 @@ import "./Game.css";
 import ChatBox from "./Chat/ChatBox";
 
 const Game = ({ room, name, videoRoom, players }) => {
-  const [socketsCreated, setSocketsCreated] = useState(false);
   const [actor, setActor] = useState("");
   const [word, setWord] = useState("");
   const [time, setTime] = useState(60);
   const [actorPlayer, setActorPlayer] = useState(null);
   const [guessedWord, setGuessedWord] = useState(false);
-
-  const isActor = () => {
-    return actor.localeCompare(videoRoom.localParticipant.identity) === 0;
-  };
 
   useEffect(() => {
     socket.on("actor", ({ actor }) => {
@@ -30,7 +25,6 @@ const Game = ({ room, name, videoRoom, players }) => {
     });
 
     socket.on("timer", ({ time }) => {
-      console.log("current timer: ", time);
       setTime(time);
     });
 
@@ -38,7 +32,7 @@ const Game = ({ room, name, videoRoom, players }) => {
       console.log("guessed word!");
       setGuessedWord(true);
     });
-  }, [socketsCreated]);
+  }, []);
 
   const remotePlayers = players
     .filter((p) => p.identity !== actor)
@@ -58,14 +52,13 @@ const Game = ({ room, name, videoRoom, players }) => {
   };
 
   useEffect(() => {
-    if (actor == name) {
+    if (actor === name) {
       console.log("setting actor player to local participant");
       setActorPlayer(videoRoom.localParticipant);
     } else if (actor !== "") {
       console.log("setting actor to remote participant");
       setActorPlayer(players.filter((p) => p.identity === actor)[0]);
     }
-    console.log(actorPlayer);
   }, [actor]);
 
   return (

@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { socket } from "../Socket";
 import "./Home.css";
 
-const url = "http://localhost:3001";
-
 const Home = ({ name, room, handleNameChange, handleRoomChange }) => {
   const joinRoom = async () => {
-    const data = { name: name, room: room };
     if (name && room) {
       console.log(name, room);
       socket.emit("joinRoomQuery", { name, room }, (error) => {
@@ -67,47 +64,3 @@ const Home = ({ name, room, handleNameChange, handleRoomChange }) => {
 };
 
 export default Home;
-
-// await fetch(url + "/joinRoom", {
-//   method: "POST", // or 'PUT'
-//   headers: {
-//     "Content-Type": "application/json",
-//   },
-//   body: JSON.stringify(data),
-// })
-//   .then((response) => response.json())
-//   .then((data) => {
-//     const { status, message } = data.response;
-//     console.log("Success:", data);
-//     if (status === 0) {
-//       history.push({
-//         pathname: "/lobby",
-//         state: { name: name, room: room, token: data.token },
-//       });
-//     } else {
-//       setErrorMsg(message);
-//       alert(message);
-//     }
-//   });
-
-// await fetch(url + "/createRoom", {
-//   method: "POST", // or 'PUT'
-//   headers: {
-//     "Content-Type": "application/json",
-//   },
-//   body: JSON.stringify(data),
-// })
-//   .then((response) => response.json())
-//   .then((data) => {
-//     const { status, message } = data.response;
-//     console.log("Success:", data);
-//     if (status === 0) {
-//       history.push({
-//         pathname: "/lobby",
-//         state: { name: name, room: data.room, token: data.token },
-//       });
-//     } else {
-//       setErrorMsg(message);
-//       alert(errorMsg);
-//     }
-//   });

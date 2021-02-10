@@ -11,32 +11,16 @@ import { socket } from "./Socket";
 const App = () => {
   const [name, setName] = useState("");
   const [room, setRoom] = useState("");
-  const [token, setToken] = useState("");
   const [videoRoom, setVideoRoom] = useState(null);
   const [players, setPlayers] = useState([]);
   const [state, setState] = useState("home");
-  const [socketsCreated, setSocketsCreated] = useState(false);
 
   useEffect(() => {
-    socket.on("joinRoomResponse", ({ response, token }) => {
+    socket.on("joinRoomResponse", ({ response, room, token }) => {
       const { status, message } = response;
       console.log("Success:", response);
-      if (status === 0) {
-        console.log("joinRoomResponse", name, room, token);
-        setToken(token);
-        setStateLobby(room, token);
-      } else {
-        alert(message);
-      }
-    });
-
-    socket.on("createRoomResponse", ({ response, room, token }) => {
-      const { status, message } = response;
-      console.log("Success:", response);
-      console.log("createRoomResponse", room, token);
       if (status === 0) {
         setRoom(room);
-        setToken(token);
         setStateLobby(room, token);
       } else {
         alert(message);
@@ -47,13 +31,12 @@ const App = () => {
       const { status, message } = response;
       console.log("Success:", response);
       if (status === 0) {
-        socket.emit("startTimer");
         setState("game");
       } else {
         alert(message);
       }
     });
-  }, [socketsCreated]);
+  }, []);
 
   const handleNameChange = useCallback((event) => {
     setName(event.target.value);
@@ -73,15 +56,65 @@ const App = () => {
     });
   };
 
-  const playerConnected = (player) => {
-    console.log("playerConnected", player);
-    setPlayers((prevPlayers) => [...prevPlayers, player]);
+  useEffect(() => {
+    const playerConnected = (player) => {
+      console.log("playerConnected", player);
+      setPlayers((prevPlayers) => [...prevPlayers, player]);
+    };
+
+    const playerDisconnected = (player) => {
+      console.log("player disconnected");
+      setPlayers((prevPlayers) => prevPlayers.filter((p) => p !== player));
+    };
+
+    if (videoRoom) {
+      console.log(`creating video room events for ${state}`);
+      videoRoom.on("participantConnected", playerConnected);
+      videoRoom.on("participantDisconnected", playerDisconnected);
+      videoRoom.participants.forEach(playerConnected);
+    }
+
+    return () => {
+      if (videoRoom) {
+        console.log(`removing video room events for ${state}`);
+        videoRoom.off("participantConnected", playerConnected);
+        videoRoom.off("participantDisconnected", playerDisconnected);
+        videoRoom.participants.forEach(playerDisconnected);
+      }
+    };
+  }, [state]);
+
+  const handleLeave = () => {
+    setVideoRoom((prevVideoRoom) => {
+      if (prevVideoRoom) {
+        prevVideoRoom.localParticipant.tracks.forEach((trackPub) => {
+          trackPub.track.stop();
+        });
+        console.log("Disconnecting from room");
+        prevVideoRoom.disconnect();
+      }
+      return null;
+    });
   };
 
-  const playerDisconnected = (player) => {
-    console.log("player disconnected");
-    setPlayers((prevPlayers) => prevPlayers.filter((p) => p !== player));
-  };
+  useEffect(() => {
+    if (videoRoom) {
+      const cleanUp = (event) => {
+        if (event.persisted) {
+          return;
+        }
+        if (videoRoom) {
+          handleLeave();
+        }
+      };
+      // window.addEventListener("pagehide", cleanUp);
+      window.addEventListener("beforeunload", cleanUp);
+      return () => {
+        // window.removeEventListener("pagehide", cleanUp);
+        window.removeEventListener("beforeunload", cleanUp);
+      };
+    }
+  }, [videoRoom]);
 
   let render;
   if (state === "home") {
@@ -94,15 +127,7 @@ const App = () => {
       />
     );
   } else if (state === "lobby") {
-    render = (
-      <Lobby
-        room={room}
-        videoRoom={videoRoom}
-        players={players}
-        playerConnected={playerConnected}
-        playerDisconnected={playerDisconnected}
-      />
-    );
+    render = <Lobby room={room} videoRoom={videoRoom} players={players} />;
   } else {
     render = (
       <Game room={room} name={name} videoRoom={videoRoom} players={players} />
@@ -110,14 +135,6 @@ const App = () => {
   }
 
   return render;
-
-  // return (
-  //   <Router>
-  //     <Route path="/" exact component={Home} />
-  //     <Route path="/lobby" component={Lobby} />
-  //     <Route path="/game" component={Game} />
-  //   </Router>
-  // );
 };
 
 export default App;
