@@ -43,7 +43,7 @@ const endGame = (room) => {
   }
 };
 
-const addUser = (room, username) => {
+const addUserToGame = (room, username) => {
   room = room.toUpperCase();
   if (activeGames.has(room)) {
     var roomData = activeGames.get(room);
@@ -51,6 +51,15 @@ const addUser = (room, username) => {
       console.log(`Adding ${username} to ${room}!`);
       roomData.userPoints.set(username, 0);
       roomData.currentOrder.push(username);
+
+      // Resend the actor and word for new user if game is started
+      var actor = roomData.currentOrder[roomData.currentActor];
+      var word = roomData.currentWord;
+
+      if (word) {
+        io.in(room).emit("actor", { actor });
+        io.in(room).emit("word", { word });
+      }
     }
   }
 };
@@ -167,7 +176,7 @@ const getRandomWord = () => {
   return words[Math.floor(Math.random() * words.length)];
 };
 
-const gameActive = (room) => {
+const isGameActive = (room) => {
   return activeGames.has(room);
 };
 
@@ -233,4 +242,6 @@ module.exports = {
   isSpoiler,
   endGame,
   removeUserFromGame,
+  isGameActive,
+  addUserToGame,
 };

@@ -20,13 +20,15 @@ const {
   isSpoiler,
   endGame,
   removeUserFromGame,
+  isGameActive,
+  addUserToGame,
 } = require("./mechanics");
 
 io.on("connect", (socket) => {
   console.log("user connected");
 
   socket.on("joinRoomQuery", ({ name, room }) => {
-    const response = addUserToRoom(socket.id, name, room);
+    var response = addUserToRoom(socket.id, name, room);
 
     const token = videoToken(name, room, config);
 
@@ -36,6 +38,16 @@ io.on("connect", (socket) => {
       token: token.toJwt(),
     });
     socket.join(room);
+
+    // If game has already started, send usermessage to start game
+    if (isGameActive(room)) {
+      response = { status: 0, message: "Success" };
+      socket.emit("startGameResponse", {
+        response,
+      });
+
+      addUserToGame(room, name);
+    }
   });
 
   socket.on("createRoomQuery", ({ name }) => {
@@ -100,7 +112,15 @@ io.on("connect", (socket) => {
   socket.on("disconnect", () => {
     console.log("user disconnected");
     const user = getUser(socket.id);
+
     if (user) {
+      console.log(
+        `${user.userName} disconnected from ${user.roomName.toUpperCase()}`
+      );
+      io.in(user.roomName.toUpperCase()).emit("userDisconnected", {
+        username: user.userName,
+      });
+
       removeUserFromRoom(socket.id, user.roomName);
       removeUserFromGame(user.roomName, user.userName);
     }

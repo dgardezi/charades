@@ -36,6 +36,13 @@ const App = () => {
         alert(message);
       }
     });
+
+    socket.on("userDisconnected", ({ username }) => {
+      console.log(`Removing user ${username}`);
+      setPlayers((prevPlayers) =>
+        prevPlayers.filter((p) => p.identity !== username)
+      );
+    });
   }, []);
 
   const handleNameChange = useCallback((event) => {
@@ -52,8 +59,8 @@ const App = () => {
       name: room,
     }).then((r) => {
       setVideoRoom(r);
-      setState("lobby");
     });
+    setState("lobby");
   };
 
   useEffect(() => {
@@ -82,7 +89,7 @@ const App = () => {
         videoRoom.participants.forEach(playerDisconnected);
       }
     };
-  }, [state]);
+  }, [videoRoom]);
 
   const handleLeave = () => {
     setVideoRoom((prevVideoRoom) => {

@@ -59,7 +59,7 @@ const Game = ({ room, name, videoRoom, players }) => {
       console.log("setting actor to remote participant");
       setActorPlayer(players.filter((p) => p.identity === actor)[0]);
     }
-  }, [actor]);
+  }, [actor, players]);
 
   return (
     <div className="gameOuterContainer">
