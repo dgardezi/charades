@@ -4,7 +4,7 @@ import { socket } from "../Socket";
 import "./Game.css";
 import ChatBox from "./Chat/ChatBox";
 
-const Game = ({ room, name, videoRoom, players }) => {
+const Game = ({ room, name, players }) => {
   const [actor, setActor] = useState("");
   const [word, setWord] = useState("");
   const [time, setTime] = useState(60);
@@ -35,9 +35,9 @@ const Game = ({ room, name, videoRoom, players }) => {
   }, []);
 
   const remotePlayers = players
-    .filter((p) => p.identity !== actor)
+    .filter((p) => p.username !== actor)
     .map((player) => (
-      <div key={player.sid} className="gameGuesser">
+      <div key={player.userId} className="gameGuesser">
         <Player player={player} />
       </div>
     ));
@@ -54,10 +54,10 @@ const Game = ({ room, name, videoRoom, players }) => {
   useEffect(() => {
     if (actor === name) {
       console.log("setting actor player to local participant");
-      setActorPlayer(videoRoom.localParticipant);
+      setActorPlayer(players.find((player) => player.username === name));
     } else if (actor !== "") {
       console.log("setting actor to remote participant");
-      setActorPlayer(players.filter((p) => p.identity === actor)[0]);
+      setActorPlayer(players.find((player) => player.username === actor));
     }
   }, [actor, players]);
 
@@ -75,16 +75,7 @@ const Game = ({ room, name, videoRoom, players }) => {
         <h1 className="gameTimer">{time}</h1>
 
         <div className="gameView">
-          <div className="gameGuessers">
-            {videoRoom && actor !== name ? (
-              <div key={videoRoom.localParticipant.sid} className="gameGuesser">
-                <Player player={videoRoom.localParticipant} />
-              </div>
-            ) : (
-              ""
-            )}
-            {remotePlayers}
-          </div>
+          <div className="gameGuessers">{remotePlayers}</div>
           <div className="gameActors">
             {actorPlayer ? (
               <div key={actorPlayer.sid} className="gameActor">

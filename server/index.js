@@ -1,4 +1,3 @@
-const { videoToken } = require("./tokens");
 const config = require("./config");
 const { io } = require("./socket");
 const {
@@ -22,7 +21,6 @@ const {
 } = require("./mechanics");
 
 io.on("connect", (socket) => {
-  console.log(socket.id);
   socket.on("joinRoomQuery", ({ name, room }) => {
     console.log(`${name} trying to join ${room}`);
     var response = addUserToRoom(socket.id, name, room);
@@ -60,7 +58,6 @@ io.on("connect", (socket) => {
 
   socket.on("usernameQuery", (userId) => {
     console.log("usernameQuery", userId);
-
     socket.emit("usernameResponse", getUser(userId).userName);
   });
 
@@ -129,7 +126,7 @@ io.on("connect", (socket) => {
         `${user.userName} disconnected from ${user.roomName.toUpperCase()}`
       );
       io.in(user.roomName.toUpperCase()).emit("userDisconnected", {
-        username: user.userName,
+        userId: socket.id,
       });
 
       removeUserFromRoom(socket.id, user.roomName);

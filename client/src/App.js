@@ -80,18 +80,18 @@ const App = () => {
         }
       });
 
-      socket.on("userDisconnected", ({ username }) => {
-        console.log(`Removing user ${username}`);
+      socket.on("userDisconnected", ({ userId }) => {
+        console.log(`Removing user ${userId}`);
 
         // Close connection to user
-        var dcUser = players.find((player) => player.username === username);
+        var dcUser = players.find((player) => player.userId === userId);
         if (dcUser) {
           dcUser.call.close();
         }
 
         // Remove user from plays
         setPlayers((prevPlayers) =>
-          prevPlayers.filter((p) => p.username !== username)
+          prevPlayers.filter((p) => p.userId !== userId)
         );
       });
     }
@@ -102,7 +102,7 @@ const App = () => {
       navigator.mediaDevices
         .getUserMedia({
           video: true,
-          // audio: true,
+          audio: true,
         })
         .then((stream) => {
           // Add client stream to players

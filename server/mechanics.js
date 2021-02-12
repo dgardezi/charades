@@ -95,15 +95,18 @@ const removeUserFromGame = (room, username) => {
 const runGame = (room) => {
   room.toUpperCase();
   if (activeGames.has(room)) {
-    if (activeGames.get(room).timer <= 0) {
-      if (!activeGames.get(room).revealed) {
-        activeGames.get(room).revealed = true;
-        activeGames.get(room).currentActor += 1;
+    var roomData = activeGames.get(room);
+    if (
+      roomData.timer <= 0 ||
+      roomData.guessedCorrectly.size === roomData.userPoints.size - 1
+    ) {
+      if (!roomData.revealed) {
+        roomData.revealed = true;
+        roomData.currentActor += 1;
       }
       // Wait for time to pass before starting game
-      var timeSinceLastGame =
-        currentTime() - activeGames.get(room).lastTimerUpdate;
-      var roomData = activeGames.get(room);
+      var timeSinceLastGame = currentTime() - roomData.lastTimerUpdate;
+
       if (timeSinceLastGame > timeoutBetweenGames) {
         if (roomData.currentActor >= roomData.currentOrder.length) {
           // Start new round
@@ -135,16 +138,15 @@ const runGame = (room) => {
         roomData.revealed = false;
       }
     } else {
-      var timeSinceLastUpdate =
-        currentTime() - activeGames.get(room).lastTimerUpdate;
+      var timeSinceLastUpdate = currentTime() - roomData.lastTimerUpdate;
       if (timeSinceLastUpdate > 1000) {
-        activeGames.get(room).timer -= 1;
+        roomData.timer -= 1;
 
         // send update timer
-        var time = activeGames.get(room).timer;
+        var time = roomData.timer;
         io.in(room).emit("timer", { time });
 
-        activeGames.get(room).lastTimerUpdate = currentTime();
+        roomData.lastTimerUpdate = currentTime();
       }
     }
   } else {
@@ -200,14 +202,6 @@ const userGuess = (room, username, guess) => {
           gameData.currentWord.trim().toLowerCase()
         ) {
           gameData.guessedCorrectly.add(username);
-          if (gameData.guessedCorrectly.size === gameData.userPoints.size - 1) {
-            console.log(
-              `Users Guessed Correctly: ${gameData.guessedCorrectly.size} \n 
-              Total Users Guessing: ${gameData.userPoints.size - 1} \n 
-              All users have guessed, setting timer to 0`
-            );
-            gameData.timer = 0;
-          }
           return true;
         }
       }
