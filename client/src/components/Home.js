@@ -5,7 +5,6 @@ import "./Home.css";
 const Home = ({ name, room, handleNameChange, handleRoomChange }) => {
   const joinRoom = async () => {
     if (name && room) {
-      console.log(name, room);
       socket.emit("joinRoomQuery", { name, room }, (error) => {
         if (error) {
           alert(error);
@@ -17,7 +16,6 @@ const Home = ({ name, room, handleNameChange, handleRoomChange }) => {
   const createRoom = () => {
     if (name) {
       console.log("Trying to create new room");
-      console.log(name);
       socket.emit("createRoomQuery", { name }, (error) => {
         if (error) {
           alert(error);

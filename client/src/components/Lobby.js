@@ -4,10 +4,10 @@ import { socket } from "../Socket";
 
 import "./Lobby.css";
 
-const Lobby = ({ room, videoRoom, players }) => {
+const Lobby = ({ room, players }) => {
   const remotePlayers = players.map((player) => (
-    <div key={player.sid} className="lobbyPlayer">
-      <Player player={player} />
+    <div key={player.id} className="lobbyPlayer">
+      <Player player={player} muted={player.call === null} />
     </div>
   ));
 
@@ -28,17 +28,7 @@ const Lobby = ({ room, videoRoom, players }) => {
           <h2>game code: {room}</h2>
         </div>
 
-        <div className="lobbyPlayers">
-          {videoRoom ? (
-            <div key="{videoRoom.localParticipant.sid}" className="lobbyPlayer">
-              <Player player={videoRoom.localParticipant} />
-            </div>
-          ) : (
-            ""
-          )}
-
-          {remotePlayers}
-        </div>
+        <div className="lobbyPlayers">{remotePlayers}</div>
         <div className="startGame">
           <div className="startButtonLink">
             <button onClick={startGame} className={"startButton"} type="submit">

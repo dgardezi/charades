@@ -1,8 +1,6 @@
 const { videoToken } = require("./tokens");
 const config = require("./config");
-
 const { io } = require("./socket");
-
 const {
   addUserToRoom,
   createRoom,
@@ -12,7 +10,6 @@ const {
   closeRoom,
   isRoomOpen,
 } = require("./rooms");
-
 const {
   createGame,
   userGuess,
@@ -25,29 +22,46 @@ const {
 } = require("./mechanics");
 
 io.on("connect", (socket) => {
-  console.log("user connected");
-
+  console.log(socket.id);
   socket.on("joinRoomQuery", ({ name, room }) => {
+    console.log(`${name} trying to join ${room}`);
     var response = addUserToRoom(socket.id, name, room);
-
-    const token = videoToken(name, room, config);
 
     socket.emit("joinRoomResponse", {
       response,
       room: room,
-      token: token.toJwt(),
     });
     socket.join(room);
 
-    // If game has already started, send usermessage to start game
-    if (isGameActive(room)) {
-      response = { status: 0, message: "Success" };
-      socket.emit("startGameResponse", {
-        response,
-      });
+    // If user could join room succesfully
+    if (response.status === 0) {
+      // If game has already started, send user a message to start game
+      if (isGameActive(room)) {
+        response = { status: 0, message: "Success" };
+        socket.emit("startGameResponse", {
+          response,
+        });
 
-      addUserToGame(room, name);
+        addUserToGame(room, name);
+      }
     }
+  });
+
+  // Once user has successfully connected to room,
+  // let all other users know.
+  // Cannot be in joinRoomResponse since client needs time to setup sockets.
+  socket.on("userConnected", (room) => {
+    console.log("userConnected", room, socket.id, getUser(socket.id).userName);
+    // Let all other users that user has connected
+    socket
+      .to(room)
+      .broadcast.emit("userConnected", socket.id, getUser(socket.id).userName);
+  });
+
+  socket.on("usernameQuery", (userId) => {
+    console.log("usernameQuery", userId);
+
+    socket.emit("usernameResponse", getUser(userId).userName);
   });
 
   socket.on("createRoomQuery", ({ name }) => {
@@ -56,12 +70,9 @@ io.on("connect", (socket) => {
     const room = createRoom();
     const response = addUserToRoom(socket.id, name, room);
 
-    const token = videoToken(name, room, config);
-
     socket.emit("joinRoomResponse", {
       response,
       room: room,
-      token: token.toJwt(),
     });
     socket.join(room);
   });
