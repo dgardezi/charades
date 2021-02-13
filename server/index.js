@@ -56,11 +56,6 @@ io.on("connect", (socket) => {
       .broadcast.emit("userConnected", socket.id, getUser(socket.id).userName);
   });
 
-  socket.on("usernameQuery", (userId) => {
-    console.log("usernameQuery", userId);
-    socket.emit("usernameResponse", getUser(userId).userName);
-  });
-
   socket.on("createRoomQuery", ({ name }) => {
     console.log(`${name} tried to make a new room`);
 

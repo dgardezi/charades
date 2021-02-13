@@ -37,8 +37,10 @@ const App = () => {
   };
 
   const connectToNewUser = (userId, username, stream) => {
-    console.log(`connecting to ${username} at ${new Date().getTime()}`);
-    const call = myPeer.call(userId, stream);
+    console.log(
+      `connecting to ${userId}, ${username} at ${new Date().getTime()}`
+    );
+    const call = myPeer.call(userId, stream, { metadata: { username: name } });
 
     console.log(`setting up stream for response ${new Date().getTime()}`);
     let count = 0;
@@ -59,6 +61,10 @@ const App = () => {
 
   useEffect(() => {
     if (myPeer) {
+      myPeer.on("error", (err) => {
+        console.log(err.type);
+      });
+
       socket.on("joinRoomResponse", ({ response, room }) => {
         const { status, message } = response;
         console.log("Success:", response);
@@ -98,6 +104,36 @@ const App = () => {
   }, [myPeer]);
 
   useEffect(() => {
+    const setupConnections = async (stream) => {
+      // Setup socket to answer calls and share stream from other users
+      console.log("setting up answering machine", new Date().getTime());
+      await myPeer.on("call", (call) => {
+        const userId = call.peer;
+        const username = call.metadata.username;
+        console.log(
+          `receiving call from ${username} at ${new Date().getTime()}`
+        );
+        call.answer(stream);
+
+        // Wait to receive the users stream
+        console.log("setting up stream answer once");
+        let count = 0;
+        call.on("stream", (userVideoStream) => {
+          if (count++ % 2 === 0) {
+            console.log(
+              `receiving stream from ${userId} at ${new Date().getTime()}`
+            );
+            addPlayer(userId, username, userVideoStream, call);
+          }
+        });
+      });
+
+      // Setup listener that calls new user when they connect
+      socket.on("userConnected", (userId, username) => {
+        connectToNewUser(userId, username, stream);
+      });
+    };
+
     if (state === "lobby") {
       navigator.mediaDevices
         .getUserMedia({
@@ -108,42 +144,11 @@ const App = () => {
           // Add client stream to players
           addPlayer(socket.id, name, stream, null);
 
-          // Setup socket to answer calls and share stream from other users
-          console.log("setting up answering machine", new Date().getTime());
-          myPeer.on("call", (call) => {
-            var userId = call.peer;
-            console.log(
-              `receiving call from ${userId} at ${new Date().getTime()}`
-            );
-            call.answer(stream);
-
-            // Wait to receive the users stream
-            console.log("setting up stream answer once");
-            let count = 0;
-            call.on("stream", (userVideoStream) => {
-              if (count++ % 2 === 0) {
-                console.log(
-                  `receiving stream from ${userId} at ${new Date().getTime()}`
-                );
-                // Get the username of the incoming caller
-                socket.emit("usernameQuery", userId);
-
-                // Wait for response of incoming username and then add player to players
-                socket.once("usernameResponse", (username) => {
-                  console.log(`Username of ${userId} is ${username}`);
-                  addPlayer(userId, username, userVideoStream, call);
-                });
-              }
-            });
-          });
-
-          // Setup listener that calls new user when they connect
-          socket.on("userConnected", (userId, username) => {
-            connectToNewUser(userId, username, stream);
-          });
-
           // After all connections are made, let server know to let other users in room know.
-          socket.emit("userConnected", room);
+          setupConnections(stream).then(() => {
+            console.log("connecting to other users");
+            socket.emit("userConnected", room);
+          });
         });
     }
   }, [state]);
