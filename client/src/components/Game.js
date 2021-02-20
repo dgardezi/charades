@@ -8,6 +8,7 @@ const Game = ({ room, name, players }) => {
   const [actor, setActor] = useState("");
   const [word, setWord] = useState("");
   const [time, setTime] = useState(60);
+  const [userPoints, setUserPoints] = useState(null);
   const [actorPlayer, setActorPlayer] = useState(null);
   const [guessedWord, setGuessedWord] = useState(false);
 
@@ -32,6 +33,12 @@ const Game = ({ room, name, players }) => {
       console.log("guessed word!");
       setGuessedWord(true);
     });
+
+    socket.on("points", (points) => {
+      console.log("received points", points);
+      setUserPoints(points);
+      console.log(points);
+    });
   }, []);
 
   const remotePlayers = players
@@ -39,6 +46,7 @@ const Game = ({ room, name, players }) => {
     .map((player) => (
       <div key={player.userId} className="gameGuesser">
         <Player player={player} />
+        <p>{userPoints !== null ? userPoints[player.username] : 0}</p>
       </div>
     ));
 

@@ -18,6 +18,7 @@ const {
   removeUserFromGame,
   isGameActive,
   addUserToGame,
+  getUserPoints,
 } = require("./mechanics");
 
 io.on("connect", (socket) => {
@@ -54,6 +55,10 @@ io.on("connect", (socket) => {
     socket
       .to(room)
       .broadcast.emit("userConnected", socket.id, getUser(socket.id).userName);
+    socket.to(room).broadcast.emit("message", {
+      user: "",
+      text: `${getUser(socket.id).userName} has joined the room`,
+    });
   });
 
   socket.on("createRoomQuery", ({ name }) => {
@@ -97,6 +102,10 @@ io.on("connect", (socket) => {
       //broadcast to rest of users points update
       //broadcast to correct user to reveal word
       socket.emit("guessed", "true");
+      socket.emit(
+        "points",
+        Object.fromEntries(getUserPoints(user.roomName.toUpperCase()))
+      );
 
       io.to(user.roomName.toUpperCase()).emit("message", {
         user: "",

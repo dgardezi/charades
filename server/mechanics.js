@@ -202,6 +202,7 @@ const userGuess = (room, username, guess) => {
           gameData.currentWord.trim().toLowerCase()
         ) {
           gameData.guessedCorrectly.add(username);
+          addUserPoint(username, room);
           return true;
         }
       }
@@ -226,7 +227,20 @@ const isSpoiler = (room, message) => {
 };
 
 const addUserPoint = (username, room) => {
-  activeGames.get(room).userPoints.get(username) += 50;
+  var gameData = activeGames.get(room.toUpperCase());
+  gameData.userPoints.set(
+    username,
+    gameData.userPoints.get(username) + gameData.timer * 10
+  ); // * 1/gussedCorrectly.length());
+  gameData.userPoints.set(
+    gameData.currentOrder[gameData.currentActor],
+    gameData.userPoints.get(gameData.currentOrder[gameData.currentActor]) + 100
+  );
+};
+
+const getUserPoints = (room) => {
+  // console.log(activeGames.get(room.toUpperCase()).userPoints);
+  return activeGames.get(room.toUpperCase()).userPoints;
 };
 
 module.exports = {
@@ -238,4 +252,5 @@ module.exports = {
   removeUserFromGame,
   isGameActive,
   addUserToGame,
+  getUserPoints,
 };
