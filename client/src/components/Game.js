@@ -3,7 +3,6 @@ import Player from "./Player";
 import { socket } from "../Socket";
 import "./Game.css";
 import ChatBox from "./Chat/ChatBox";
-import useSound from "use-sound";
 
 // Sound Effects
 // -------------------

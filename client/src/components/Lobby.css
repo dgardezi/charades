@@ -105,6 +105,20 @@ body {
   cursor: pointer;
 }
 
+.greyedStartButton {
+  color: #fff !important;
+  font-weight: bold;
+  text-decoration: none;
+  /* background: #708a97; */
+  background-color: #d1cecd;
+  padding: 15px 20px;
+  border-radius: 5px;
+  display: inline-block;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+}
+
 .startButton button:focus {
   outline: 0;
 }
