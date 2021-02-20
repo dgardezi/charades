@@ -3,6 +3,22 @@ import Player from "./Player";
 import { socket } from "../Socket";
 import "./Game.css";
 import ChatBox from "./Chat/ChatBox";
+import useSound from "use-sound";
+
+// Sound Effects
+// -------------------
+// User Join
+import userJoinSound from "../resources/sounds/playerJoin.mp3";
+// User leave
+import userLeaveSound from "../resources/sounds/playerLeave.mp3";
+// User guesses word correct
+import guessCorrectSound from "../resources/sounds/correctGuess.mp3";
+// Timer getting low
+import timerLowSound from "../resources/sounds/timerLow.mp3";
+// Round end
+import roundEndSound from "../resources/sounds/roundEnd.mp3";
+// Round start
+import roundStartSound from "../resources/sounds/roundStart.mp3";
 
 const Game = ({ room, name, players }) => {
   const [actor, setActor] = useState("");
@@ -13,6 +29,27 @@ const Game = ({ room, name, players }) => {
   const [guessedWord, setGuessedWord] = useState(false);
 
   useEffect(() => {
+    var guessedCorrectAudio = new Audio(guessCorrectSound);
+    guessedCorrectAudio.volume = 0.2;
+    var userJoinAudio = new Audio(userJoinSound);
+    userJoinAudio.volume = 0.2;
+    var userLeaveAudio = new Audio(userLeaveSound);
+    userLeaveAudio.volume = 0.2;
+    var timerLowAudio = new Audio(timerLowSound);
+    timerLowAudio.volume = 0.2;
+    var roundStartAudio = new Audio(roundStartSound);
+    roundStartAudio.volume = 0.2;
+    var roundEndAudio = new Audio(roundEndSound);
+    roundEndAudio.volume = 0.2;
+
+    socket.on("userConnected", (userId, username) => {
+      userJoinAudio.play();
+    });
+
+    socket.on("userDisconnected", (userId, username) => {
+      userLeaveAudio.play();
+    });
+
     socket.on("actor", ({ actor }) => {
       console.log("current actor: ", actor);
       setActor(actor);
@@ -21,17 +58,26 @@ const Game = ({ room, name, players }) => {
 
     socket.on("word", ({ word }) => {
       console.log("current word: ", word);
+      roundStartAudio.play();
       setWord(word);
       setGuessedWord(false);
     });
 
     socket.on("timer", ({ time }) => {
       setTime(time);
+      if (time <= 10 && time > 0) {
+        timerLowAudio.play();
+      } else if (time === 0) {
+        roundEndAudio.play();
+      }
     });
 
-    socket.on("guessed", ({ guessed }) => {
-      console.log("guessed word!");
-      setGuessedWord(true);
+    socket.on("guessed", (username) => {
+      console.log(`${username} guessed word!`);
+      guessedCorrectAudio.play();
+      if (username === name) {
+        setGuessedWord(true);
+      }
     });
 
     socket.on("points", (points) => {
@@ -45,7 +91,7 @@ const Game = ({ room, name, players }) => {
     .filter((p) => p.username !== actor)
     .map((player) => (
       <div key={player.userId} className="gameGuesser">
-        <Player player={player} />
+        <Player player={player} muted={true} />
         <p>{userPoints !== null ? userPoints[player.username] : 0}</p>
       </div>
     ));

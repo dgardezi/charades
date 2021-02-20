@@ -7,7 +7,7 @@ import "./Lobby.css";
 const Lobby = ({ room, players }) => {
   const remotePlayers = players.map((player) => (
     <div key={player.userId} className="lobbyPlayer">
-      <Player player={player} muted={player.call === null} />
+      <Player player={player} muted={player.call == null} />
     </div>
   ));
 
