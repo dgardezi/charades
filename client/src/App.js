@@ -6,7 +6,12 @@ import Game from "./components/Game";
 
 import { socket } from "./Socket";
 
-const PEER_OPTIONS = { host: "localhost", port: "9000", path: "video" };
+const PEER_OPTIONS = {
+  host: "localhost",
+  port: "9000",
+  path: "video",
+  debug: 3,
+};
 
 const App = () => {
   const [name, setName] = useState("");
@@ -56,13 +61,14 @@ const App = () => {
 
   useEffect(() => {
     // Setup peer on startup
+    console.log(socket.id);
     setMyPeer(new Peer(socket.id, PEER_OPTIONS));
   }, []);
 
   useEffect(() => {
     if (myPeer) {
       myPeer.on("error", (err) => {
-        console.log(err.type);
+        console.log(err.type, err);
       });
 
       socket.on("joinRoomResponse", ({ response, room }) => {

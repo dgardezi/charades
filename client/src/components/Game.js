@@ -87,7 +87,7 @@ const Game = ({ room, name, players }) => {
           <div className="gameActors">
             {actorPlayer ? (
               <div key={actorPlayer.sid} className="gameActor">
-                <Player player={actorPlayer} />
+                <Player player={actorPlayer} muted={true} />
               </div>
             ) : (
               "loading next round's actor ..."

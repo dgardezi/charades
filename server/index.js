@@ -1,3 +1,4 @@
+const { v4: uuid_v4 } = require("uuid");
 const config = require("./config");
 const { io } = require("./socket");
 const {
@@ -20,6 +21,10 @@ const {
   addUserToGame,
   getUserPoints,
 } = require("./mechanics");
+
+io.engine.generateId = (req) => {
+  return uuid_v4();
+};
 
 io.on("connect", (socket) => {
   socket.on("joinRoomQuery", ({ name, room }) => {
