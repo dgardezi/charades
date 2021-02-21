@@ -211,6 +211,7 @@ const userGuess = (room, username, guess) => {
         ) {
           gameData.guessedCorrectly.add(username);
           addUserPoint(username, room);
+          gameData.timer = Math.ceil(gameData.timer * 0.75);
           return true;
         }
       }
