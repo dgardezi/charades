@@ -14,12 +14,12 @@ const {
   createGame,
   userGuess,
   addUserPoint,
-  isSpoiler,
   endGame,
   removeUserFromGame,
   isGameActive,
   addUserToGame,
   getUserPoints,
+  distMessage,
 } = require("./mechanics");
 
 io.engine.generateId = (req) => {
@@ -117,12 +117,7 @@ io.on("connect", (socket) => {
         text: `${user.userName} has guessed the word!`,
       });
     } else {
-      if (!isSpoiler(user.roomName, message)) {
-        io.to(user.roomName.toUpperCase()).emit("message", {
-          user: user.userName,
-          text: message,
-        });
-      }
+      distMessage(user, message);
     }
   });
 

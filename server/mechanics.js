@@ -1,7 +1,9 @@
 const { words } = require("./words");
+const { getUsersFromRoom } = require("./rooms");
 const activeGames = new Map(); // { userPoints,currentOrder,currentActor,currentWord,timer,lastTimerUpdate, guessedCorrectly
 const timeoutBetweenGames = 5000; //in milliseconds
 const { io } = require("./socket.js");
+const { emit } = require("nodemon");
 const currentTime = () => {
   return new Date().getTime();
 };
@@ -202,34 +204,22 @@ const userGuess = (room, username, guess) => {
       gameData.userPoints.has(username) &&
       gameData.currentOrder[gameData.currentActor] != username
     ) {
-      // If the user has not already guessed correctly
-      if (!gameData.guessedCorrectly.has(username)) {
-        // If the guess is the same as the word
-        if (
-          guess.trim().toLowerCase() ===
-          gameData.currentWord.trim().toLowerCase()
-        ) {
-          gameData.guessedCorrectly.add(username);
-          addUserPoint(username, room);
-          gameData.timer = Math.ceil(gameData.timer * 0.75);
-          return true;
+      // If the current word has been set
+      if (gameData.currentWord) {
+        // If the user has not already guessed correctly
+        if (!gameData.guessedCorrectly.has(username)) {
+          // If the guess is the same as the word
+          if (
+            guess.trim().toLowerCase() ===
+            gameData.currentWord.trim().toLowerCase()
+          ) {
+            gameData.guessedCorrectly.add(username);
+            addUserPoint(username, room);
+            gameData.timer = Math.ceil(gameData.timer * 0.75);
+            return true;
+          }
         }
       }
-    }
-  }
-  return false;
-};
-
-const isSpoiler = (room, message) => {
-  var r = room.toUpperCase();
-  console.log(room, message, activeGames);
-  if (activeGames.has(r)) {
-    var gameData = activeGames.get(r);
-
-    if (
-      message.trim().toLowerCase().includes(gameData.currentWord.toLowerCase())
-    ) {
-      return true;
     }
   }
   return false;
@@ -252,14 +242,41 @@ const getUserPoints = (room) => {
   return activeGames.get(room.toUpperCase()).userPoints;
 };
 
+const distMessage = (user, message) => {
+  gameData = activeGames.get(user.roomName.toUpperCase());
+  users = getUsersFromRoom(user.roomName.toUpperCase());
+  // if the user has correctly guessed, only send their message to others who also correctly guessed
+  if (
+    gameData.guessedCorrectly !== null &&
+    gameData.guessedCorrectly.has(user.userName)
+  ) {
+    for (var key in users) {
+      if (
+        gameData.guessedCorrectly.has(users[key].userName) ||
+        users[key].userName === gameData.currentOrder[gameData.currentActor]
+      ) {
+        io.to(users[key].userId).emit("message", {
+          user: user.userName,
+          text: message,
+        });
+      }
+    }
+  } else {
+    io.to(user.roomName.toUpperCase()).emit("message", {
+      user: user.userName,
+      text: message,
+    });
+  }
+};
+
 module.exports = {
   createGame,
   userGuess,
   addUserPoint,
-  isSpoiler,
   endGame,
   removeUserFromGame,
   isGameActive,
   addUserToGame,
   getUserPoints,
+  distMessage,
 };

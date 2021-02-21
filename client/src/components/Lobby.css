@@ -110,13 +110,12 @@ body {
   font-weight: bold;
   text-decoration: none;
   /* background: #708a97; */
-  background-color: #d1cecd;
+  background-color: #b3b0af;
   padding: 15px 20px;
   border-radius: 5px;
   display: inline-block;
   border: none;
   width: 100%;
-  cursor: pointer;
 }
 
 .startButton button:focus {
