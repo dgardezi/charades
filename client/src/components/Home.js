@@ -44,7 +44,7 @@ const Home = ({ name, room, handleNameChange, handleRoomChange }) => {
             className="login-input"
             type="text"
             placeholder="nickname"
-            maxLength="20"
+            maxLength="15"
             onChange={handleNameChange}
           />
           <input

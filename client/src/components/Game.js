@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Player from "./Player";
 import { socket } from "../Socket";
-import "./Game.css";
+import Player from "./Player";
+import Logo from "../resources/images/logo.svg";
 import ChatBox from "./Chat/ChatBox";
+import "./Game.css";
 
 // Sound Effects
 // -------------------
@@ -90,9 +91,12 @@ const Game = ({ room, name, players }) => {
   const remotePlayers = players
     .filter((p) => p.username !== actor)
     .map((player) => (
-      <div key={player.userId} className="gameGuesser">
-        <Player player={player} muted={player.call == null} />
-        <p>{userPoints !== null ? userPoints[player.username] : 0}</p>
+      <div key={player.userId} className="guesser">
+        <div className="guesser-camera">
+          <Player player={player} muted={player.call == null} />
+        </div>
+        <p className="guesser-name">{player.username}</p>
+        {/* <p>{userPoints !== null ? userPoints[player.username] : 0}</p> */}
       </div>
     ));
 
@@ -116,9 +120,14 @@ const Game = ({ room, name, players }) => {
   }, [actor, players]);
 
   return (
-    <div className="gameOuterContainer">
-      <div className="gameInnerContainer">
-        <div className="gameWord">
+    <div className="game-container">
+      <div className="header">
+        <img
+          src={Logo}
+          onClick={() => window.location.reload()}
+          className="header-logo"
+        />
+        <h1 className="word">
           {players.length >= 2 ? (
             actor === name || time === 0 || guessedWord ? (
               <h1>{word}</h1>
@@ -128,30 +137,66 @@ const Game = ({ room, name, players }) => {
           ) : (
             <h1>Waiting for players</h1>
           )}
-        </div>
-
-        <h1 className="gameTimer">{time}</h1>
-
-        <div className="gameView">
-          <div className="gameGuessers">{remotePlayers}</div>
-          <div className="gameActors">
-            {actorPlayer ? (
-              <div key={actorPlayer.sid} className="gameActor">
-                <Player player={actorPlayer} muted={true} />
-              </div>
-            ) : (
-              "loading next round's actor ..."
-            )}
-          </div>
-          <div className="gameChat">
-            <div className="gameChatWindow">
-              <ChatBox room={room} name={name} />
+        </h1>
+        <div className="dummy"></div>
+      </div>
+      <div className="timer" />
+      <div className="game-components">
+        <div className="camera-section">
+          <div className="actor">
+            <div className="actor-camera">
+              {actorPlayer ? <Player player={actorPlayer} muted={true} /> : ""}
             </div>
+            <p className="guesser-name">
+              {actorPlayer ? actorPlayer.username : ""}
+            </p>
           </div>
+          <div className="guesser-camera-section">{remotePlayers}</div>
+        </div>
+        <div className="chatbox">
+          <ChatBox room={room} name={name} />
         </div>
       </div>
     </div>
   );
+
+  // return (
+  //   <div className="gameOuterContainer">
+  //     <div className="gameInnerContainer">
+  //       <div className="gameWord">
+  //         {players.length >= 2 ? (
+  //           actor === name || time === 0 || guessedWord ? (
+  //             <h1>{word}</h1>
+  //           ) : (
+  //             <h1>{getWordHint(word)}</h1>
+  //           )
+  //         ) : (
+  //           <h1>Waiting for players</h1>
+  //         )}
+  //       </div>
+
+  //       <h1 className="gameTimer">{time}</h1>
+
+  //       <div className="gameView">
+  //         <div className="gameGuessers">{remotePlayers}</div>
+  //         <div className="gameActors">
+  //           {actorPlayer ? (
+  //             <div key={actorPlayer.sid} className="gameActor">
+  //               <Player player={actorPlayer} muted={true} />
+  //             </div>
+  //           ) : (
+  //             "loading next round's actor ..."
+  //           )}
+  //         </div>
+  //         <div className="gameChat">
+  //           <div className="gameChatWindow">
+  //             <ChatBox room={room} name={name} />
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
 };
 
 export default Game;

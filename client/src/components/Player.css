@@ -1,6 +1,6 @@
 .videoArea {
-  width: 18vw;
-  height: 13.5vw;
+  width: 100%;
+  height: 100%;
   background-color: var(--color-black);
   border: 0.3vw solid white;
   border-radius: 0.6vw;
@@ -12,6 +12,7 @@
 .playerVideo {
   width: 100%;
   height: 100%;
+  object-fit: cover;
 }
 
 .volumeControls {
