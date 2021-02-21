@@ -1,0 +1,103 @@
+.game-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header {
+    margin-top: 3vh;
+    width: 97.5%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-logo {
+    width: 5%;
+    height: auto;
+    cursor: pointer;
+}
+
+.header-logo:hover {
+    transform: translateY(-0.25vh);
+}
+
+.word {
+    color: var(--color-white);
+    font-size: 3.75vw;
+    font-weight: 600;
+    text-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    line-height: 1;
+    cursor: default;
+}
+
+.dummy {
+    width: 5%;
+    height: 100%;
+}
+
+.timer {
+    background-color: var(--color-white);
+    box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.15);
+    width: 67.5%;
+    height: 1.5vh;
+    border-radius: 0.60vw;
+}
+
+.game-components {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 75%;
+    margin-bottom: 3vh;
+}
+
+.camera-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 60%;
+}
+
+.actor-camera {
+    width: 45vw;
+    height: 30vw;
+    background-color: var(--color-black);
+    border: 0.30vw solid white;
+    border-radius: 0.60vw;
+    box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.15);
+    stroke: var(--color-white);
+}
+
+.guesser-camera-section {
+    margin-top: 2vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.guesser-camera {
+    width: 8vw;
+    height: 6vw;
+    background-color: var(--color-black);
+    border: 0.30vw solid white;
+    border-radius: 0.60vw;
+    box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.15);
+    stroke: var(--color-white);
+}
+
+.chatbox {
+    width: 25%;
+    height: 100%;
+    background-color: var(--color-white);
+    border-radius: 0.30vw;
+}

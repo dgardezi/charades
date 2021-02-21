@@ -1,4 +1,5 @@
 import React from "react";
+import Logo from "../resources/images/logo.svg";
 import { socket } from "../Socket";
 import "./Home.css";
 
@@ -25,36 +26,70 @@ const Home = ({ name, room, handleNameChange, handleRoomChange }) => {
   };
 
   return (
-    <div className="homeOuterContainer">
-      <div className="homeInnerContainer">
-        <div className="homeHeader">
-          <h1>charades.me</h1>
+    <div className="home-container">
+      <div className="logo-section">
+        <div className="logo">
+          <img src={Logo} className="logo-image" />
+          <p className="logo-subtext">
+            face to face fun with the ones you love,
+            <br />
+            minus the risk.
+          </p>
         </div>
-
-        <div className="joinRoomForm">
+      </div>
+      <div className="login-section">
+        <div className="login-form">
+          <h1 className="title">charades</h1>
           <input
-            placeholder="nickname"
-            className="nicknameInput"
+            className="login-input"
             type="text"
+            placeholder="nickname"
+            maxLength="20"
             onChange={handleNameChange}
           />
           <input
-            placeholder="game code"
-            className="gamecodeInput"
+            className="login-input"
             type="text"
+            placeholder="game code"
+            maxLength="4"
             onChange={handleRoomChange}
           />
-          <div className="joinButtonLink" onClick={joinRoom}>
-            <button className={"joinButton"} type="submit">
-              join
+          <div className="login-buttons">
+            <button className="join-button" onClick={joinRoom}>
+              join game
+            </button>
+            <button className="create-button" onClick={createRoom}>
+              create a game
             </button>
           </div>
         </div>
-
-        <div className="createGame">
-          <div className="createGameLink" onClick={createRoom}>
-            <p>create a game</p>
-          </div>
+        <div className="footer">
+          <p className="footer-creators">
+            created by{" "}
+            <a
+              href="https://www.linkedin.com/in/dmercer10/"
+              target="_blank"
+              className="creator-name"
+            >
+              duncan mercer
+            </a>
+            ,{" "}
+            <a
+              href="https://www.linkedin.com/in/durongardezi/"
+              target="_blank"
+              className="creator-name"
+            >
+              duron gardezi
+            </a>
+            ,{" "}
+            <a
+              href="https://www.linkedin.com/in/griffin-bentley-72b391199/"
+              target="_blank"
+              className="creator-name"
+            >
+              griffin bentley
+            </a>
+          </p>
         </div>
       </div>
     </div>
