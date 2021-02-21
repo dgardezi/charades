@@ -262,10 +262,12 @@ const distMessage = (user, message) => {
       }
     }
   } else {
-    io.to(user.roomName.toUpperCase()).emit("message", {
-      user: user.userName,
-      text: message,
-    });
+    if (gameData.currentOrder[gameData.currentActor] !== user.userName) {
+      io.to(user.roomName.toUpperCase()).emit("message", {
+        user: user.userName,
+        text: message,
+      });
+    }
   }
 };
 
