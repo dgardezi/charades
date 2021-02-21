@@ -106,7 +106,7 @@ io.on("connect", (socket) => {
     if (correct) {
       //broadcast to rest of users points update
       //broadcast to correct user to reveal word
-      socket.emit("guessed", "true");
+      socket.emit("guessed", user.userName);
       socket.emit(
         "points",
         Object.fromEntries(getUserPoints(user.roomName.toUpperCase()))
