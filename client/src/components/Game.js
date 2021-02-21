@@ -75,6 +75,7 @@ const Game = ({ room, name, players }) => {
       console.log(`${username} guessed word!`);
       guessedCorrectAudio.play();
       if (username === name) {
+        console.log("YOU GUESSED THE WORD");
         setGuessedWord(true);
       }
     });

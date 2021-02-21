@@ -16,7 +16,7 @@ const PEER_OPTIONS = {
 const App = () => {
   const [name, setName] = useState("");
   const [room, setRoom] = useState("");
-  const [players, setPlayers] = useState([]); // player = {userId, username, stream, call}
+  const [players, setPlayers] = useState([]); // player = {userId, username, stream, call, volume}
   const [state, setState] = useState("home");
   const [myPeer, setMyPeer] = useState(null);
 
@@ -37,6 +37,7 @@ const App = () => {
         username: username,
         stream: stream,
         call: call,
+        volume: 0.5,
       },
     ]);
   };

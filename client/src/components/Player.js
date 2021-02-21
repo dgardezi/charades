@@ -7,7 +7,7 @@ import halfVolume from "../resources/icons/volumeHalf.svg";
 import mute from "../resources/icons/mute.svg";
 
 const Player = ({ player, muted }) => {
-  const [volumeVal, setVolumeVal] = useState(0.5);
+  const [volumeVal, setVolumeVal] = useState(player.volume);
   const [prevVolumeVal, setPrevVolumeVal] = useState(0.5);
   const userVideo = useRef();
 
@@ -25,6 +25,7 @@ const Player = ({ player, muted }) => {
 
   const handleVolumeChange = useCallback((event) => {
     setVolumeVal(event.target.value);
+    player.volume = event.target.value;
   }, []);
 
   const handleVolumePress = useCallback(
@@ -33,11 +34,13 @@ const Player = ({ player, muted }) => {
       if (volumeVal !== 0) {
         setPrevVolumeVal(volumeVal);
         setVolumeVal(0);
+        player.volume = 0;
         document.getElementById("volControl").value = 0;
       } else {
         console.log("there");
         console.log(prevVolumeVal);
         setVolumeVal(prevVolumeVal);
+        player.volume = prevVolumeVal;
         document.getElementById("volControl").value = prevVolumeVal;
       }
     },
