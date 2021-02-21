@@ -28,7 +28,7 @@ const ChatBox = ({ room, name }) => {
 
     if (message) {
       console.log("attempting to send", message);
-      socket.emit("sendMessage", {message:message});
+      socket.emit("sendMessage", { message: message });
       setMessage("");
     }
   };

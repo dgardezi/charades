@@ -1,43 +1,23 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Player from "./Player";
 import { socket } from "../Socket";
 
 import "./Lobby.css";
 
-const Lobby = ({
-  room,
-  videoRoom,
-  players,
-  playerConnected,
-  playerDisconnected,
-}) => {
-  useEffect(() => {
-    if (videoRoom) {
-      videoRoom.on("participantConnected", playerConnected);
-      videoRoom.on("participantDisconnected", playerDisconnected);
-      videoRoom.participants.forEach(playerConnected);
-    }
-    return () => {
-      if (videoRoom) {
-        videoRoom.off("participantConnected", playerConnected);
-        videoRoom.off("participantDisconnected", playerDisconnected);
-      }
-    };
-  }, [videoRoom]);
-
+const Lobby = ({ room, players }) => {
   const remotePlayers = players.map((player) => (
-    <div key="{player.id}" className="lobbyPlayer">
-      <Player player={player} />
+    <div key={player.userId} className="lobbyPlayer">
+      <Player player={player} muted={player.call == null} />
     </div>
   ));
 
   const startGame = () => {
     console.log("starting game");
-      socket.emit("startGameQuery", { room }, (error) => {
-        if (error) {
-          alert(error);
-        }
-      })
+    socket.emit("startGameQuery", { room }, (error) => {
+      if (error) {
+        alert(error);
+      }
+    });
   };
 
   return (
@@ -48,22 +28,22 @@ const Lobby = ({
           <h2>game code: {room}</h2>
         </div>
 
-        <div className="lobbyPlayers">
-          {videoRoom ? (
-            <div key="{videoRoom.localParticipant.sid}" className="lobbyPlayer">
-              <Player player={videoRoom.localParticipant} />
-            </div>
-          ) : (
-            ""
-          )}
-
-          {remotePlayers}
-        </div>
+        <div className="lobbyPlayers">{remotePlayers}</div>
         <div className="startGame">
           <div className="startButtonLink">
-            <button onClick={startGame} className={"startButton"} type="submit">
-              start game
-            </button>
+            {players.length >= 2 ? (
+              <button
+                onClick={startGame}
+                className={"startButton"}
+                type="submit"
+              >
+                start game
+              </button>
+            ) : (
+              <button className={"greyedStartButton"}>
+                not enough players
+              </button>
+            )}
           </div>
         </div>
       </div>

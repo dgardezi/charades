@@ -4,45 +4,95 @@ import { socket } from "../Socket";
 import "./Game.css";
 import ChatBox from "./Chat/ChatBox";
 
-const Game = ({ room, name, videoRoom, players }) => {
-  const [socketsCreated, setSocketsCreated] = useState(false);
+// Sound Effects
+// -------------------
+// User Join
+import userJoinSound from "../resources/sounds/playerJoin.mp3";
+// User leave
+import userLeaveSound from "../resources/sounds/playerLeave.mp3";
+// User guesses word correct
+import guessCorrectSound from "../resources/sounds/correctGuess.mp3";
+// Timer getting low
+import timerLowSound from "../resources/sounds/timerLow.mp3";
+// Round end
+import roundEndSound from "../resources/sounds/roundEnd.mp3";
+// Round start
+import roundStartSound from "../resources/sounds/roundStart.mp3";
+
+const Game = ({ room, name, players }) => {
   const [actor, setActor] = useState("");
   const [word, setWord] = useState("");
   const [time, setTime] = useState(60);
+  const [userPoints, setUserPoints] = useState(null);
   const [actorPlayer, setActorPlayer] = useState(null);
   const [guessedWord, setGuessedWord] = useState(false);
 
-  const isActor = () => {
-    return actor.localeCompare(videoRoom.localParticipant.identity) === 0;
-  };
-
   useEffect(() => {
+    var guessedCorrectAudio = new Audio(guessCorrectSound);
+    guessedCorrectAudio.volume = 0.2;
+    var userJoinAudio = new Audio(userJoinSound);
+    userJoinAudio.volume = 0.2;
+    var userLeaveAudio = new Audio(userLeaveSound);
+    userLeaveAudio.volume = 0.2;
+    var timerLowAudio = new Audio(timerLowSound);
+    timerLowAudio.volume = 0.2;
+    var roundStartAudio = new Audio(roundStartSound);
+    roundStartAudio.volume = 0.2;
+    var roundEndAudio = new Audio(roundEndSound);
+    roundEndAudio.volume = 0.2;
+
+    socket.on("userConnected", (userId, username) => {
+      userJoinAudio.play();
+    });
+
+    socket.on("userDisconnected", (userId, username) => {
+      userLeaveAudio.play();
+    });
+
     socket.on("actor", ({ actor }) => {
       console.log("current actor: ", actor);
       setActor(actor);
+      setGuessedWord(false);
     });
 
     socket.on("word", ({ word }) => {
       console.log("current word: ", word);
+      roundStartAudio.play();
       setWord(word);
+      setGuessedWord(false);
     });
 
     socket.on("timer", ({ time }) => {
-      console.log("current timer: ", time);
       setTime(time);
+      if (time <= 10 && time > 0) {
+        timerLowAudio.play();
+      } else if (time === 0) {
+        roundEndAudio.play();
+      }
     });
 
-    socket.on("guessed", ({ guessed }) => {
-      console.log("guessed word!");
-      setGuessedWord(true);
+    socket.on("guessed", (username) => {
+      console.log(`${username} guessed word!`);
+      guessedCorrectAudio.play();
+      if (username === name) {
+        console.log("YOU GUESSED THE WORD");
+        setGuessedWord(true);
+      }
     });
-  }, [socketsCreated]);
+
+    socket.on("points", (points) => {
+      console.log("received points", points);
+      setUserPoints(points);
+      console.log(points);
+    });
+  }, []);
 
   const remotePlayers = players
-    .filter((p) => p.identity !== actor)
+    .filter((p) => p.username !== actor)
     .map((player) => (
-      <div key={player.id} className="gameGuesser">
-        <Player player={player} />
+      <div key={player.userId} className="gameGuesser">
+        <Player player={player} muted={player.call == null} />
+        <p>{userPoints !== null ? userPoints[player.username] : 0}</p>
       </div>
     ));
 
@@ -58,41 +108,36 @@ const Game = ({ room, name, videoRoom, players }) => {
   useEffect(() => {
     if (actor === name) {
       console.log("setting actor player to local participant");
-      setActorPlayer(videoRoom.localParticipant);
-    } else {
+      setActorPlayer(players.find((player) => player.username === name));
+    } else if (actor !== "") {
       console.log("setting actor to remote participant");
-      setActorPlayer(players.filter((p) => p.identity === actor)[0]);
+      setActorPlayer(players.find((player) => player.username === actor));
     }
-    console.log(actorPlayer);
-  }, [actor]);
+  }, [actor, players]);
+
   return (
     <div className="gameOuterContainer">
       <div className="gameInnerContainer">
         <div className="gameWord">
-          {actor === name || time === 0 || guessedWord ? (
-            <h1>{word}</h1>
+          {players.length >= 2 ? (
+            actor === name || time === 0 || guessedWord ? (
+              <h1>{word}</h1>
+            ) : (
+              <h1>{getWordHint(word)}</h1>
+            )
           ) : (
-            <h1>{getWordHint(word)}</h1>
+            <h1>Waiting for players</h1>
           )}
         </div>
 
         <h1 className="gameTimer">{time}</h1>
 
         <div className="gameView">
-          <div className="gameGuessers">
-            {videoRoom && actor !== name ? (
-              <div key={videoRoom.localParticipant.sid} className="gameGuesser">
-                <Player player={videoRoom.localParticipant} />
-              </div>
-            ) : (
-              ""
-            )}
-            {remotePlayers}
-          </div>
+          <div className="gameGuessers">{remotePlayers}</div>
           <div className="gameActors">
             {actorPlayer ? (
               <div key={actorPlayer.sid} className="gameActor">
-                <Player player={actorPlayer} />
+                <Player player={actorPlayer} muted={true} />
               </div>
             ) : (
               "loading next round's actor ..."

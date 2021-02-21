@@ -1,0 +1,78 @@
+.player {
+  width: 100%;
+  position: relative;
+}
+
+.videoArea {
+  width: 100%;
+  height: 100%;
+}
+
+.volumeControls {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+  align-items: center;
+  height: 40%;
+  width: 10%;
+  margin-bottom: 2%;
+}
+
+.volumeButton {
+  opacity: 0%;
+  width: 60%;
+  height: auto;
+  transition: opacity 0.2s;
+  transition: all 0s ease 0.2s;
+}
+
+.slider {
+  visibility: hidden;
+  opacity: 0%;
+  -webkit-appearance: none;
+  appearance: none;
+  overflow: hidden;
+  height: 5%;
+  width: 200%;
+  border-radius: 3px;
+  margin-bottom: 110%;
+  transition: opacity 0.2s;
+  transition: all 0s ease 0.2s;
+  transform: translateY(0%) rotate(270deg);
+}
+
+.slider::-webkit-slider-runnable-track {
+  background: #ddd;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 0; /* 1 */
+  height: 0;
+  background: #fff;
+  box-shadow: -100vw 0 0 100vw dodgerblue;
+}
+
+.volumeButton:hover {
+  cursor: pointer;
+}
+
+.videoArea:hover > .volumeControls .volumeButton {
+  transition-delay: 0s;
+  opacity: 100%;
+}
+
+.slider:hover {
+  cursor: pointer;
+  visibility: visible;
+  opacity: 100%;
+}
+
+.volumeButton:hover + .slider {
+  transition-delay: 0s;
+  visibility: visible;
+  opacity: 100%;
+}

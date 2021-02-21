@@ -9,4 +9,8 @@ const cors = require("cors");
 app.use(cors());
 app.use(router);
 
+// Start Peer server to handle video connections
+const { PeerServer } = require("peer");
+const peerServer = PeerServer({ port: 9000, path: "video" });
+
 module.exports = { io };
