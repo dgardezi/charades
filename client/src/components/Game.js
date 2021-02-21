@@ -3,7 +3,6 @@ import Player from "./Player";
 import { socket } from "../Socket";
 import "./Game.css";
 import ChatBox from "./Chat/ChatBox";
-import useSound from "use-sound";
 
 // Sound Effects
 // -------------------
@@ -91,7 +90,7 @@ const Game = ({ room, name, players }) => {
     .filter((p) => p.username !== actor)
     .map((player) => (
       <div key={player.userId} className="gameGuesser">
-        <Player player={player} muted={true} />
+        <Player player={player} muted={player.call == null} />
         <p>{userPoints !== null ? userPoints[player.username] : 0}</p>
       </div>
     ));
