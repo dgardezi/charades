@@ -20,6 +20,7 @@ const {
   addUserToGame,
   getUserPoints,
   distMessage,
+  setCurrentWord,
 } = require("./mechanics");
 
 io.engine.generateId = (req) => {
@@ -141,6 +142,13 @@ io.on("connect", (socket) => {
       removeUserFromRoom(socket.id, user.roomName);
       removeUserFromGame(user.roomName, user.userName);
     }
+  });
+
+  socket.on("wordChoice", (word) => {
+    console.log("received word choice");
+    const user = getUser(socket.id);
+    setCurrentWord(user.roomName, word);
+    io.in(user.roomName).emit("word", { word });
   });
 });
 

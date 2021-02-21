@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
-import { ControlBar, VolumeMenuButton } from "video-react";
 import "./Player.css";
 
 import fullVolume from "../resources/icons/volumeFull.svg";

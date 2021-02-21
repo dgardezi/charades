@@ -8,6 +8,10 @@ const currentTime = () => {
   return new Date().getTime();
 };
 
+const setCurrentWord = (room, word) => {
+  activeGames.get(room.toUpperCase()).currentWord = word;
+};
+
 const createGame = (room, users) => {
   // Map (keys: userName, value: points)
   let userPoints = new Map(users.map((u) => [u.userName, 0]));
@@ -101,6 +105,8 @@ const removeUserFromGame = (room, username) => {
   }
 };
 
+var timeoutWord;
+
 const runGame = (room) => {
   room.toUpperCase();
   if (activeGames.has(room)) {
@@ -130,11 +136,39 @@ const runGame = (room) => {
         console.log("sending actor: ", actor);
         io.in(room).emit("actor", { actor });
 
-        roomData.currentWord = getRandomWord();
+        roomData.currentWord = null;
+        timeoutWord = sendWordChoices(actor, room);
+        console.log(timeoutWord);
 
-        //sendWord
-        var word = roomData.currentWord;
-        io.in(room).emit("word", { word });
+        // let toWait = 250;
+        // let counter = 0;
+        // var intervalId = setInterval(() => {
+        //   console.log(intervalId);
+        //   clearInterval(intervalId);
+        //   if (roomData.currentWord === null) {
+        //     counter += toWait;
+        //     console.log(counter);
+        //     if (counter >= 2000) {
+        //       roomData.currentWord = timeoutWord;
+        //       io.in(room).emit("word", { word: roomData.currentWord });
+        //       clearInterval(intervalId);
+        //     }
+        //   } else {
+        //     clearInterval(intervalId);
+        //   }
+        // }, toWait);
+
+        // while (currentWord === null) {
+        //   console.log(counter);
+        //   setTimeout(() => {
+        //     counter += toWait;
+        //     if (counter > 10000) {
+        //       currentWord = timeoutWord;
+        //       io.in(room).emit("word", { currentWord });
+        //     }
+        //   }, toWait);
+        // }
+        // console.log("out of interval loop");
 
         roomData.guessedCorrectly = new Set();
 
@@ -149,7 +183,14 @@ const runGame = (room) => {
       }
     } else {
       var timeSinceLastUpdate = currentTime() - roomData.lastTimerUpdate;
-      if (timeSinceLastUpdate > 1000 && roomData.userPoints.size !== 1) {
+      if (roomData.currentWord === null) {
+        console.log(timeSinceLastUpdate);
+        if (timeSinceLastUpdate >= 2000) {
+          roomData.currentWord = timeoutWord;
+          console.log(roomData.currentWord, timeoutWord);
+          io.in(room).emit("word", { word: roomData.currentWord });
+        }
+      } else if (timeSinceLastUpdate > 1000 && roomData.userPoints.size !== 1) {
         roomData.timer -= 1;
 
         // send update timer
@@ -184,8 +225,24 @@ const shuffle = (array) => {
   return array;
 };
 
-const getRandomWord = () => {
-  return words[Math.floor(Math.random() * words.length)];
+const sendWordChoices = (actor, room) => {
+  console.log("sending word choices");
+  gameData = activeGames.get(room.toUpperCase());
+  let wordChoices = new Set();
+  users = getUsersFromRoom(room.toUpperCase());
+  while (wordChoices.size < 3) {
+    wordChoices.add(words[Math.floor(Math.random() * words.length)]);
+  }
+  wordChoices = Array.from(wordChoices);
+
+  for (let key in users) {
+    if (
+      users[key].userName === gameData.currentOrder[gameData.accurrentActor]
+    ) {
+      io.to(users[key].userId).emit("wordChoices", wordChoices);
+    }
+  }
+  return wordChoices[Math.floor(Math.random() * 3)];
 };
 
 const isGameActive = (room) => {
@@ -281,4 +338,5 @@ module.exports = {
   addUserToGame,
   getUserPoints,
   distMessage,
+  setCurrentWord,
 };
