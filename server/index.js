@@ -131,6 +131,11 @@ io.on("connect", (socket) => {
     const user = getUser(socket.id);
 
     if (user) {
+      socket.to(user.roomName.toUpperCase()).broadcast.emit("message", {
+        user: "",
+        text: `${user.userName} has left the room`,
+      });
+
       console.log(
         `${user.userName} disconnected from ${user.roomName.toUpperCase()}`
       );
