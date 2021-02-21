@@ -118,10 +118,14 @@ const Game = ({ room, name, players }) => {
     <div className="gameOuterContainer">
       <div className="gameInnerContainer">
         <div className="gameWord">
-          {actor === name || time === 0 || guessedWord ? (
-            <h1>{word}</h1>
+          {players.length >= 2 ? (
+            actor === name || time === 0 || guessedWord ? (
+              <h1>{word}</h1>
+            ) : (
+              <h1>{getWordHint(word)}</h1>
+            )
           ) : (
-            <h1>{getWordHint(word)}</h1>
+            <h1>Waiting for players</h1>
           )}
         </div>
 

@@ -52,13 +52,18 @@ const addUserToGame = (room, username) => {
       roomData.userPoints.set(username, 0);
       roomData.currentOrder.push(username);
 
-      // Resend the actor and word for new user if game is started
-      var actor = roomData.currentOrder[roomData.currentActor];
-      var word = roomData.currentWord;
+      if (roomData.userPoints.size !== 2) {
+        // Resend the actor and word for new user if game is started
+        var actor = roomData.currentOrder[roomData.currentActor];
+        var word = roomData.currentWord;
 
-      if (word) {
-        io.in(room).emit("actor", { actor });
-        io.in(room).emit("word", { word });
+        if (word) {
+          io.in(room).emit("actor", { actor });
+          io.in(room).emit("word", { word });
+        }
+      } else {
+        roomData.timer = 0;
+        roomData.lastTimerUpdate = currentTime();
       }
     }
   }
@@ -88,6 +93,8 @@ const removeUserFromGame = (room, username) => {
     // If lastUser in room, endGame
     if (roomData.userPoints.size === 0) {
       endGame(room);
+    } else if (roomData.userPoints.size === 1) {
+      roomData.timer = 0;
     }
   }
 };
@@ -98,7 +105,8 @@ const runGame = (room) => {
     var roomData = activeGames.get(room);
     if (
       roomData.timer <= 0 ||
-      roomData.guessedCorrectly.size === roomData.userPoints.size - 1
+      (roomData.userPoints.size !== 1 &&
+        roomData.guessedCorrectly.size === roomData.userPoints.size - 1)
     ) {
       if (!roomData.revealed) {
         roomData.revealed = true;
@@ -139,7 +147,7 @@ const runGame = (room) => {
       }
     } else {
       var timeSinceLastUpdate = currentTime() - roomData.lastTimerUpdate;
-      if (timeSinceLastUpdate > 1000) {
+      if (timeSinceLastUpdate > 1000 && roomData.userPoints.size !== 1) {
         roomData.timer -= 1;
 
         // send update timer
