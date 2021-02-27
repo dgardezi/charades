@@ -236,9 +236,7 @@ const sendWordChoices = (actor, room) => {
   wordChoices = Array.from(wordChoices);
 
   for (let key in users) {
-    if (
-      users[key].userName === gameData.currentOrder[gameData.accurrentActor]
-    ) {
+    if (users[key].userName === actor) {
       io.to(users[key].userId).emit("wordChoices", wordChoices);
     }
   }

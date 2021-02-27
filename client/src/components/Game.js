@@ -23,6 +23,7 @@ import roundStartSound from "../resources/sounds/roundStart.mp3";
 const Game = ({ room, name, players }) => {
   const [actor, setActor] = useState("");
   const [word, setWord] = useState("");
+  const [wordChoices, setWordChoices] = useState([]);
   const [time, setTime] = useState(60);
   const [userPoints, setUserPoints] = useState(null);
   const [actorPlayer, setActorPlayer] = useState(null);
@@ -61,6 +62,11 @@ const Game = ({ room, name, players }) => {
       roundStartAudio.play();
       setWord(word);
       setGuessedWord(false);
+    });
+
+    socket.on("wordChoices", (wordChoices) => {
+      setWordChoices(wordChoices);
+      console.log(wordChoices);
     });
 
     socket.on("timer", ({ time }) => {
