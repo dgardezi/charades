@@ -5,7 +5,7 @@ import fullVolume from "../resources/icons/volumeFull.svg";
 import halfVolume from "../resources/icons/volumeHalf.svg";
 import mute from "../resources/icons/mute.svg";
 
-const Player = ({ player, muted }) => {
+const Player = ({ player, muted, isActor }) => {
   const [volumeVal, setVolumeVal] = useState(player.volume);
   const [prevVolumeVal, setPrevVolumeVal] = useState(0.5);
   const userVideo = useRef();
@@ -58,7 +58,12 @@ const Player = ({ player, muted }) => {
 
   return (
     <div className="videoArea">
-      <video ref={userVideo} autoPlay={true} muted={muted} className="playerVideo" />
+      <video
+        ref={userVideo}
+        autoPlay={true}
+        muted={muted}
+        className="playerVideo"
+      />
       {!muted ? (
         <div className="volumeControls">
           <img
@@ -77,6 +82,16 @@ const Player = ({ player, muted }) => {
             onChange={handleVolumeChange}
           ></input>
         </div>
+      ) : (
+        ""
+      )}
+      {isActor ? (
+        <div class="timer" id="timer" />
+      ) : (
+        ""
+      )}
+      {isActor ? (
+        <div class="mask" id="mask" />
       ) : (
         ""
       )}

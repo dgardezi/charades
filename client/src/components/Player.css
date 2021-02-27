@@ -1,18 +1,47 @@
 .videoArea {
   width: 100%;
   height: 100%;
-  background-color: var(--color-black);
-  border: 0.3vw solid white;
+  background-color: var(--color-white);
+  /* border: 0.3vw solid var(--color-white); */
   border-radius: 0.6vw;
   box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.15);
-  stroke: var(--color-white);
   position: relative;
+  padding: 2vw;
+  overflow:hidden;
+  display: grid;
+  justify-items: center;
+  align-items: center;
 }
 
 .playerVideo {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 0.6vw;
+  z-index: 10;
+}
+
+.timer {
+  height: 200%;
+  width: 200%;
+  border-radius: 50%;
+  background: linear-gradient(90deg, var(--color-pink) 50%, var(--color-white) 50%);
+  transition: transform 1s linear;
+}
+
+.mask {
+  height:200%;
+  width:100%;
+  margin-left: -100%;
+  content:"";
+  border-radius: 100% 0 0 100% / 50% 0 0 50%;
+  transform-origin: 100% 50%;
+  transition-delay: 1s;
+}
+
+.mask, .timer, .playerVideo {
+  grid-column: 1;
+  grid-row: 1;
 }
 
 .volumeControls {
