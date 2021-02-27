@@ -24,7 +24,10 @@ const {
 } = require("./mechanics");
 
 io.engine.generateId = (req) => {
-  return uuid_v4();
+  let variable = uuid_v4();
+  console.log(variable);
+  console.log(Date.now());
+  return variable;
 };
 
 io.on("connect", (socket) => {

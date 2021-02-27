@@ -62,53 +62,58 @@ const App = () => {
 
   useEffect(() => {
     // Setup peer on startup
-    console.log(socket.id);
-    setMyPeer(new Peer(socket.id, PEER_OPTIONS));
-  }, []);
+    if (socket.id) {
+      //console.log(socket.id);
+      console.log(socket.id, Date.now());
+      setMyPeer(new Peer(socket.id, PEER_OPTIONS));
+    }
+  }, [socket]);
 
   useEffect(() => {
     if (myPeer) {
       myPeer.on("error", (err) => {
         console.log(err.type, err);
       });
-
-      socket.on("joinRoomResponse", ({ response, room }) => {
-        const { status, message } = response;
-        console.log("Success:", response);
-        if (status === 0) {
-          setRoom(room);
-          setState("lobby");
-        } else {
-          alert(message);
-        }
-      });
-
-      socket.on("startGameResponse", ({ response }) => {
-        const { status, message } = response;
-        console.log("Success:", response);
-        if (status === 0) {
-          setState("game");
-        } else {
-          alert(message);
-        }
-      });
-
-      socket.on("userDisconnected", ({ userId }) => {
-        console.log(`Removing user ${userId}`);
-
-        // Close connection to user
-        var dcUser = players.find((player) => player.userId === userId);
-        if (dcUser) {
-          dcUser.call.close();
-        }
-
-        // Remove user from plays
-        setPlayers((prevPlayers) =>
-          prevPlayers.filter((p) => p.userId !== userId)
-        );
-      });
     }
   }, [myPeer]);
+
+  useEffect(() => {
+    socket.on("joinRoomResponse", ({ response, room }) => {
+      const { status, message } = response;
+      console.log("Success:", response);
+      if (status === 0) {
+        setRoom(room);
+        setState("lobby");
+      } else {
+        alert(message);
+      }
+    });
+
+    socket.on("startGameResponse", ({ response }) => {
+      const { status, message } = response;
+      console.log("Success:", response);
+      if (status === 0) {
+        setState("game");
+      } else {
+        alert(message);
+      }
+    });
+
+    socket.on("userDisconnected", ({ userId }) => {
+      console.log(`Removing user ${userId}`);
+
+      // Close connection to user
+      var dcUser = players.find((player) => player.userId === userId);
+      if (dcUser) {
+        dcUser.call.close();
+      }
+
+      // Remove user from plays
+      setPlayers((prevPlayers) =>
+        prevPlayers.filter((p) => p.userId !== userId)
+      );
+    });
+  }, []);
 
   useEffect(() => {
     const setupConnections = async (stream) => {
