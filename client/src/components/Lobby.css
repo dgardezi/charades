@@ -1,123 +1,129 @@
-html,
-body {
-  font-family: "Roboto", sans-serif;
-  padding: 0;
-  margin: 0;
-  line-height: 0;
-}
-
-#root {
+.lobby-container {
+  width: 100vw;
   height: 100vh;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-.lobbyOuterContainer {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  text-align: center;
-  height: 100vh;
-  /* background-color: #1a1a1d; */
-  background-color: #212121;
 }
 
-.lobbyInnerContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  height: 100%;
-  width: 90%;
-}
-
-.lobbyHeader {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  color: white;
-}
-
-.lobbyHeader h1 {
-  font-size: 10em;
-  margin-bottom: 50px;
-}
-
-.lobbyHeader h2 {
-  font-size: 3em;
-}
-
-.lobbyPlayers {
+.header {
+  margin-top: 5vh;
+  width: 95%;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  padding: 0 2em 2em;
-  margin: 25px 0px;
 }
 
-.lobbyPlayer {
-  /* background: #708a97; */
-  background-color: #121212;
-  color: white;
-  border-radius: 4px 4px 0 0;
-  display: inline-block;
-  margin-right: 10px;
-}
-
-.lobbyPlayer video {
-  width: 100%;
-  max-width: 600px;
-  display: block;
-  margin: 0 auto;
-}
-
-.startGame {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  width: 50%;
-}
-
-.startButtonLink {
-  width: 50%;
-}
-
-.startButton {
-  color: #fff !important;
-  font-weight: bold;
-  text-decoration: none;
-  /* background: #708a97; */
-  background-color: #f76763;
-  padding: 15px 20px;
-  border-radius: 5px;
-  display: inline-block;
-  border: none;
-  width: 100%;
+.header-logo {
+  width: 5%;
+  height: auto;
   cursor: pointer;
 }
 
-.greyedStartButton {
-  color: #fff !important;
-  font-weight: bold;
-  text-decoration: none;
-  /* background: #708a97; */
-  background-color: #b3b0af;
-  padding: 15px 20px;
-  border-radius: 5px;
-  display: inline-block;
-  border: none;
-  width: 100%;
+.header-logo:hover {
+  transform: translateY(-0.25vh);
 }
 
-.startButton button:focus {
-  outline: 0;
+.header-gamecode {
+  color: var(--color-white);
+  font-size: 3.75vw;
+  font-weight: 600;
+  text-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  line-height: 1;
+  cursor: default;
+}
+
+.dummy {
+  width: 5%;
+  height: 100%;
+}
+
+.player-grid {
+  margin-bottom: 2vh;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  width: 75%;
+}
+
+.player {
+  margin: 1vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.player-camera {
+  width: 18vw;
+  height: 13.5vw;
+}
+
+.player-name {
+  margin-top: 0.75vh;
+  color: var(--color-white);
+  font-size: 1vw;
+  font-weight: 500;
+  text-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  line-height: 1;
+  cursor: default;
+}
+
+.start-game-section {
+  margin-bottom: 3vh;
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.player-count {
+  color: var(--color-white);
+  font-size: 1vw;
+  font-weight: 600;
+  text-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  cursor: default;
+}
+
+.start-button {
+  margin-top: 2.5vh;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  width: 15%;
+  padding: 1vw 1vw;
+  border-radius: 0.40vw;
+  box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.15);
+  background-color: var(--color-pink);
+  color: var(--color-white);
+  font-size: 1vw;
+  font-weight: 700;
+  text-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+.start-button-disabled {
+  margin-top: 2.5vh;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  width: 15%;
+  padding: 1vw 1vw;
+  border-radius: 0.40vw;
+  box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.15);
+  background-color: var(--color-gray);
+  color: var(--color-white);
+  font-size: 1vw;
+  font-weight: 700;
+  text-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.1);
+}
+
+.start-button:hover {
+  transform: translateY(-0.25vh);
 }

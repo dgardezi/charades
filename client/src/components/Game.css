@@ -1,142 +1,118 @@
-html,
-body {
-  font-family: "Roboto", sans-serif;
-  padding: 0;
-  margin: 0;
-  line-height: 0;
+.game-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 }
 
-#root {
-  height: 100vh;
+.header {
+    margin-top: 3vh;
+    width: 97.5%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 
-* {
-  box-sizing: border-box;
+.header-logo {
+    width: 5%;
+    height: auto;
+    cursor: pointer;
 }
 
-.gameOuterContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  text-align: center;
-  height: 100vh;
-  /* background-color: #1a1a1d; */
-  /* background-color: #25292F; */
-  background-color: #212121;
-  padding-top: 50px;
-  padding-bottom: 100px;
+.header-logo:hover {
+    transform: translateY(-0.25vh);
 }
 
-.gameInnerContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  height: 100%;
-  width: 90%;
+.word {
+    color: var(--color-white);
+    font-size: 1.75vw;
+    font-weight: 600;
+    text-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    line-height: 1;
+    cursor: default;
 }
 
-.gameTimer {
-  color: white;
-  text-align: center;
+.dummy {
+    width: 5%;
+    height: 100%;
 }
 
-.gameWord {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  margin-top: 25px;
-  margin-bottom: 25px;
+.timer {
+    background-color: var(--color-white);
+    box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.15);
+    width: 67.5%;
+    height: 1vh;
+    border-radius: 0.60vw;
 }
 
-.gameWord h1 {
-  font-size: 3em;
-  text-align: center;
-  color: white;
+.game-components {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 75%;
+    margin-bottom: 3vh;
 }
 
-.gameView {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
+.camera-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 60%;
 }
 
-.gameGuessers {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  width: 20%;
-  height: 100%;
+.actor {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.gameGuesser {
-  /* background: #708a97; */
-  background-color: #121212;
-  color: white;
-  border-radius: 4px 4px 0 0;
-  display: inline-block;
-  margin-bottom: 11vh;
-  height: 6vh;
-  width: 8vw;
+.actor-camera {
+    width: 45vw;
+    height: 30vw;
 }
 
-.gameGuesser video {
-  height: 100%;
-  width: 100%;
-  display: block;
-  margin: auto 0;
-  border-radius: 4px 4px 0 0;
+.guesser-camera-section {
+    margin-top: 2vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
-.gameActors {
-  margin-left: 25px;
-  margin-right: 25px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 60%;
-  height: 100%;
-  background: black;
-  color: white;
-  border-radius: 4px 4px 0 0;
+.guesser {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.gameActor {
-  /* background: #708a97; */
-  background-color: #121212;
-  color: white;
-  width: 100%;
-  height: 100%;
-  border-radius: 4px 4px 0 0;
-  display: inline-block;
+.guesser-camera {
+    width: 8vw;
+    height: 6vw;
 }
 
-.gameActor video {
-  width: 100%;
-  height: 100%;
-  display: block;
-  margin: 0 auto;
+.guesser-name {
+    margin-top: 0.75vh;
+    color: var(--color-white);
+    font-size: 0.75vw;
+    font-weight: 500;
+    text-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    line-height: 1;
+    cursor: default;
 }
 
-.gameChat {
-  width: 20%;
-  height: 100%;
-  align-self: stretch;
-}
-
-.gameChatWindow {
-  display: inline-block;
-  width: 100%;
-  height: 100%;
-  align-self: stretch;
-  background: white;
+.chatbox {
+    width: 25%;
+    height: 100%;
+    background-color: var(--color-white);
+    border-radius: 0.30vw;
 }

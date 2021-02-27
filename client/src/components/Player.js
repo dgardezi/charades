@@ -57,32 +57,29 @@ const Player = ({ player, muted }) => {
   };
 
   return (
-    <div className="player">
-      <h3>{player.username}</h3>
-      <div className="videoArea">
-        <video ref={userVideo} autoPlay={true} muted={muted} />
-        {!muted ? (
-          <div className="volumeControls">
-            <img
-              className="volumeButton"
-              src={getVolumeIcon()}
-              onClick={handleVolumePress}
-            />
-            <input
-              className="slider"
-              id="volControl"
-              type="range"
-              min="0"
-              max="1"
-              value={volumeVal}
-              step="0.01"
-              onChange={handleVolumeChange}
-            ></input>
-          </div>
-        ) : (
-          ""
-        )}
-      </div>
+    <div className="videoArea">
+      <video ref={userVideo} autoPlay={true} muted={muted} className="playerVideo" />
+      {!muted ? (
+        <div className="volumeControls">
+          <img
+            className="volumeButton"
+            src={getVolumeIcon()}
+            onClick={handleVolumePress}
+          />
+          <input
+            className="slider"
+            id="volControl"
+            type="range"
+            min="0"
+            max="1"
+            value={volumeVal}
+            step="0.01"
+            onChange={handleVolumeChange}
+          ></input>
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };
