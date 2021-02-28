@@ -43,6 +43,31 @@ const Game = ({ room, name, players }) => {
     var roundEndAudio = new Audio(roundEndSound);
     roundEndAudio.volume = 0.2;
 
+    const updateTimerBorder = (percentage) => {
+      let timer = document.getElementById("timer");
+      let mask = document.getElementById("mask");
+
+      if (percentage === 1) {
+        document.getElementById("timer").style.WebkitTransition =
+          "all 0s linear";
+      } else {
+        document.getElementById("timer").style.WebkitTransition =
+          "all 1s linear";
+      }
+
+      var timerPos = -(360 - Math.floor(360 * percentage));
+      if (Math.abs(timerPos) < 180) {
+        var maskPos = 180;
+        mask.style.backgroundColor = "var(--color-pink)";
+      } else {
+        var maskPos = 0;
+        mask.style.backgroundColor = "var(--color-white)";
+      }
+
+      timer.style.transform = "rotate(" + timerPos + "deg)";
+      mask.style.transform = "rotate(" + maskPos + "deg)";
+    };
+
     socket.on("userConnected", (userId, username) => {
       userJoinAudio.play();
     });
@@ -71,9 +96,12 @@ const Game = ({ room, name, players }) => {
 
     socket.on("timer", ({ time }) => {
       setTime(time);
-      if (time <= 10 && time > 0) {
+      if (time >= 0) {
+        updateTimerBorder(time / 60);
+      }
+      if (time <= 9 && time > -1) {
         timerLowAudio.play();
-      } else if (time === 0) {
+      } else if (time === -1) {
         roundEndAudio.play();
       }
     });
@@ -135,7 +163,7 @@ const Game = ({ room, name, players }) => {
         />
         <div className="word">
           {players.length >= 2 ? (
-            actor === name || time === 0 || guessedWord ? (
+            actor === name || time === -1 || guessedWord ? (
               <h1>{word}</h1>
             ) : (
               <h1>{getWordHint(word)}</h1>
@@ -150,7 +178,11 @@ const Game = ({ room, name, players }) => {
         <div className="camera-section">
           <div className="actor">
             <div className="actor-camera">
-              {actorPlayer ? <Player player={actorPlayer} muted={true} isActor={true} /> : ""}
+              {actorPlayer ? (
+                <Player player={actorPlayer} muted={true} isActor={true} />
+              ) : (
+                ""
+              )}
             </div>
             <p className="guesser-name">
               {actorPlayer ? actorPlayer.username : ""}

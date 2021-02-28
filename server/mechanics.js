@@ -112,7 +112,7 @@ const runGame = (room) => {
   if (activeGames.has(room)) {
     var roomData = activeGames.get(room);
     if (
-      roomData.timer <= 0 ||
+      roomData.timer <= -1 ||
       (roomData.userPoints.size !== 1 &&
         roomData.guessedCorrectly.size === roomData.userPoints.size - 1)
     ) {

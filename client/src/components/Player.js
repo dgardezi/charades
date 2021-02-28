@@ -57,44 +57,38 @@ const Player = ({ player, muted, isActor }) => {
   };
 
   return (
-    <div className="videoArea">
-      <video
-        ref={userVideo}
-        autoPlay={true}
-        muted={muted}
-        className="playerVideo"
-      />
-      {!muted ? (
-        <div className="volumeControls">
-          <img
-            className="volumeButton"
-            src={getVolumeIcon()}
-            onClick={handleVolumePress}
-          />
-          <input
-            className="slider"
-            id="volControl"
-            type="range"
-            min="0"
-            max="1"
-            value={volumeVal}
-            step="0.01"
-            onChange={handleVolumeChange}
-          ></input>
-        </div>
-      ) : (
-        ""
-      )}
-      {isActor ? (
-        <div class="timer" id="timer" />
-      ) : (
-        ""
-      )}
-      {isActor ? (
-        <div class="mask" id="mask" />
-      ) : (
-        ""
-      )}
+    <div className="playerContainer">
+      <div className="videoArea">
+        <video
+          ref={userVideo}
+          autoPlay={true}
+          muted={muted}
+          className="playerVideo"
+        ></video>
+        {!muted ? (
+          <div className="volumeControls">
+            <img
+              className="volumeButton"
+              src={getVolumeIcon()}
+              onClick={handleVolumePress}
+            />
+            <input
+              className="slider"
+              id="volControl"
+              type="range"
+              min="0"
+              max="1"
+              value={volumeVal}
+              step="0.01"
+              onChange={handleVolumeChange}
+            ></input>
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
+      {isActor ? <div className="timer" id="timer" /> : ""}
+      {isActor ? <div className="mask" id="mask" /> : ""}
     </div>
   );
 };
