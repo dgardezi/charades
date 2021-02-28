@@ -1,8 +1,9 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useContext } from "react";
 import Peer from "peerjs";
 import Home from "./components/Home";
 import Lobby from "./components/Lobby";
 import Game from "./components/Game";
+import { GameContext } from "./GameContext";
 
 import { socket } from "./Socket";
 
@@ -14,23 +15,11 @@ const PEER_OPTIONS = {
 };
 
 const App = () => {
-  const [name, setName] = useState("");
-  const [room, setRoom] = useState("");
-  const [players, setPlayers] = useState([]); // player = {userId, username, stream, call, volume}
-  const [state, setState] = useState("home");
-  const [myPeer, setMyPeer] = useState(null);
-
-  const handleNameChange = useCallback((event) => {
-    setName(event.target.value);
-  }, []);
-
-  const handleRoomChange = useCallback((event) => {
-    setRoom(event.target.value.trim().toUpperCase());
-  }, []);
+  const gameContext = useContext(GameContext);
 
   const addPlayer = (userId, username, stream, call) => {
-    console.log("adding player", players);
-    setPlayers((prevplayers) => [
+    console.log("adding player", gameContext.players);
+    gameContext.setPlayers((prevplayers) => [
       ...prevplayers,
       {
         userId: userId,
@@ -46,7 +35,9 @@ const App = () => {
     console.log(
       `connecting to ${userId}, ${username} at ${new Date().getTime()}`
     );
-    const call = myPeer.call(userId, stream, { metadata: { username: name } });
+    const call = gameContext.myPeer.call(userId, stream, {
+      metadata: { username: gameContext.name },
+    });
 
     console.log(`setting up stream for response ${new Date().getTime()}`);
     let count = 0;
@@ -65,25 +56,25 @@ const App = () => {
     if (socket.id) {
       //console.log(socket.id);
       console.log(socket.id, Date.now());
-      setMyPeer(new Peer(socket.id, PEER_OPTIONS));
+      gameContext.setMyPeer(new Peer(socket.id, PEER_OPTIONS));
     }
   }, [socket]);
 
   useEffect(() => {
-    if (myPeer) {
-      myPeer.on("error", (err) => {
+    if (gameContext.myPeer) {
+      gameContext.myPeer.on("error", (err) => {
         console.log(err.type, err);
       });
     }
-  }, [myPeer]);
+  }, [gameContext.myPeer]);
 
   useEffect(() => {
     socket.on("joinRoomResponse", ({ response, room }) => {
       const { status, message } = response;
       console.log("Success:", response);
       if (status === 0) {
-        setRoom(room);
-        setState("lobby");
+        gameContext.setRoom(room);
+        gameContext.setState("lobby");
       } else {
         alert(message);
       }
@@ -93,7 +84,7 @@ const App = () => {
       const { status, message } = response;
       console.log("Success:", response);
       if (status === 0) {
-        setState("game");
+        gameContext.setState("game");
       } else {
         alert(message);
       }
@@ -103,13 +94,15 @@ const App = () => {
       console.log(`Removing user ${userId}`);
 
       // Close connection to user
-      var dcUser = players.find((player) => player.userId === userId);
+      var dcUser = gameContext.players.find(
+        (player) => player.userId === userId
+      );
       if (dcUser) {
         dcUser.call.close();
       }
 
-      // Remove user from plays
-      setPlayers((prevPlayers) =>
+      // Remove user from players
+      gameContext.setPlayers((prevPlayers) =>
         prevPlayers.filter((p) => p.userId !== userId)
       );
     });
@@ -119,7 +112,7 @@ const App = () => {
     const setupConnections = async (stream) => {
       // Setup socket to answer calls and share stream from other users
       console.log("setting up answering machine", new Date().getTime());
-      await myPeer.on("call", (call) => {
+      await gameContext.myPeer.on("call", (call) => {
         const userId = call.peer;
         const username = call.metadata.username;
         console.log(
@@ -146,7 +139,7 @@ const App = () => {
       });
     };
 
-    if (state === "lobby") {
+    if (gameContext.state === "lobby") {
       navigator.mediaDevices
         .getUserMedia({
           video: true,
@@ -154,31 +147,24 @@ const App = () => {
         })
         .then((stream) => {
           // Add client stream to players
-          addPlayer(socket.id, name, stream, null);
+          addPlayer(socket.id, gameContext.name, stream, null);
 
           // After all connections are made, let server know to let other users in room know.
           setupConnections(stream).then(() => {
             console.log("connecting to other users");
-            socket.emit("userConnected", room);
+            socket.emit("userConnected", gameContext.room);
           });
         });
     }
-  }, [state]);
+  }, [gameContext.state]);
 
   let render;
-  if (state === "home") {
-    render = (
-      <Home
-        name={name}
-        room={room}
-        handleNameChange={handleNameChange}
-        handleRoomChange={handleRoomChange}
-      />
-    );
-  } else if (state === "lobby") {
-    render = <Lobby room={room} players={players} />;
+  if (gameContext.state === "home") {
+    render = <Home />;
+  } else if (gameContext.state === "lobby") {
+    render = <Lobby />;
   } else {
-    render = <Game room={room} name={name} players={players} />;
+    render = <Game />;
   }
 
   return render;

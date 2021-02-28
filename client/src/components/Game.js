@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { socket } from "../Socket";
 import Player from "./Player";
 import Logo from "../resources/images/logo.svg";
 import ChatBox from "./Chat/ChatBox";
 import "./Game.css";
+import { GameContext } from "../GameContext";
 
 // Sound Effects
 // -------------------
@@ -20,7 +21,9 @@ import roundEndSound from "../resources/sounds/roundEnd.mp3";
 // Round start
 import roundStartSound from "../resources/sounds/roundStart.mp3";
 
-const Game = ({ room, name, players }) => {
+const Game = () => {
+  const gameContext = useContext(GameContext);
+
   const [actor, setActor] = useState("");
   const [word, setWord] = useState("");
   const [wordChoices, setWordChoices] = useState([]);
@@ -109,7 +112,7 @@ const Game = ({ room, name, players }) => {
     socket.on("guessed", (username) => {
       console.log(`${username} guessed word!`);
       guessedCorrectAudio.play();
-      if (username === name) {
+      if (username === gameContext.name) {
         console.log("YOU GUESSED THE WORD");
         setGuessedWord(true);
       }
@@ -122,7 +125,7 @@ const Game = ({ room, name, players }) => {
     });
   }, []);
 
-  const remotePlayers = players
+  const remotePlayers = gameContext.players
     .filter((p) => p.username !== actor)
     .map((player) => (
       <div key={player.userId} className="guesser">
@@ -144,14 +147,20 @@ const Game = ({ room, name, players }) => {
   };
 
   useEffect(() => {
-    if (actor === name) {
+    if (actor === gameContext.name) {
       console.log("setting actor player to local participant");
-      setActorPlayer(players.find((player) => player.username === name));
+      setActorPlayer(
+        gameContext.players.find(
+          (player) => player.username === gameContext.name
+        )
+      );
     } else if (actor !== "") {
       console.log("setting actor to remote participant");
-      setActorPlayer(players.find((player) => player.username === actor));
+      setActorPlayer(
+        gameContext.players.find((player) => player.username === actor)
+      );
     }
-  }, [actor, players]);
+  }, [actor, gameContext.players]);
 
   return (
     <div className="game-container">
@@ -162,8 +171,8 @@ const Game = ({ room, name, players }) => {
           className="header-logo"
         />
         <div className="word">
-          {players.length >= 2 ? (
-            actor === name || time === -1 || guessedWord ? (
+          {gameContext.players.length >= 2 ? (
+            actor === gameContext.name || time === -1 || guessedWord ? (
               <h1>{word}</h1>
             ) : (
               <h1>{getWordHint(word)}</h1>
@@ -191,7 +200,7 @@ const Game = ({ room, name, players }) => {
           <div className="guesser-camera-section">{remotePlayers}</div>
         </div>
         <div className="chatbox">
-          <ChatBox room={room} name={name} />
+          <ChatBox room={gameContext.room} name={gameContext.name} />
         </div>
       </div>
     </div>

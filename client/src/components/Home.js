@@ -1,24 +1,39 @@
-import React from "react";
+import React, { useContext, useEffect, useCallback } from "react";
 import Logo from "../resources/images/logo.svg";
 import { socket } from "../Socket";
 import "./Home.css";
+import { GameContext } from "../GameContext";
 
-const Home = ({ name, room, handleNameChange, handleRoomChange }) => {
-  const joinRoom = async () => {
-    if (name && room) {
-      console.log("Trying to join room ", room);
-      socket.emit("joinRoomQuery", { name, room }, (error) => {
-        if (error) {
-          alert(error);
+const Home = () => {
+  const gameContext = useContext(GameContext);
+
+  const handleNameChange = useCallback((event) => {
+    gameContext.setName(event.target.value);
+  }, []);
+
+  const handleRoomChange = useCallback((event) => {
+    gameContext.setRoom(event.target.value.trim().toUpperCase());
+  }, []);
+
+  const joinRoom = () => {
+    if (gameContext.name && gameContext.room) {
+      console.log("Trying to join room ", gameContext.room);
+      socket.emit(
+        "joinRoomQuery",
+        { name: gameContext.name, room: gameContext.room },
+        (error) => {
+          if (error) {
+            alert(error);
+          }
         }
-      });
+      );
     }
   };
 
   const createRoom = () => {
-    if (name) {
+    if (gameContext.name) {
       console.log("Trying to create new room");
-      socket.emit("createRoomQuery", { name }, (error) => {
+      socket.emit("createRoomQuery", { name: gameContext.name }, (error) => {
         if (error) {
           alert(error);
         }
