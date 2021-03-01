@@ -1,21 +1,20 @@
 import React from "react";
+import send_icon from "../../resources/icons/send-button.svg";
 import "./ChatTextfield.css";
 
 const ChatTextfield = ({ setMessage, sendMessage, message }) => (
-  <form className="form">
+  <form className="chat-input">
     <input
-      className="input"
+      className="text-input"
       type="text"
-      placeholder="Make a guess ..."
+      placeholder="make a guess . . ."
       value={message}
       onChange={({ target: { value } }) => setMessage(value)}
       onKeyPress={(e) =>
         e.key === "Enter" ? sendMessage(e) : null
       }
     />
-    <button className="sendButton" onClick={(e) => sendMessage(e)}>
-      <p>SEND</p>
-    </button>
+    <img src={send_icon} className="send-button" onClick={(e) => sendMessage(e)} />
   </form>
 );
 

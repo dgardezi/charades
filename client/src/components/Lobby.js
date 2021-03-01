@@ -40,7 +40,7 @@ const Lobby = () => {
       <div className="player-grid">{remotePlayers}</div>
       <div className="start-game-section">
         <p className="player-count">{gameContext.players.length} / 6 players</p>
-        {gameContext.players.length >= 2 ? (
+        {gameContext.players.length >= 1 ? (
           <button className="start-button" onClick={startGame}>
             start game
           </button>

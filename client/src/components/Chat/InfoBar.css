@@ -1,19 +1,16 @@
-.infoBar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    /* background: #708a97; */
-    background-color: #121212;
-    border-radius: 4px 4px 0 0;
-    height: 40px;
-    width: 100%;
-  }
+.infobar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-white);
+  padding-left: 5%;
+  height: 7.5%;
+  width: 100%;
+  border-bottom: 1px solid var(--color-lightgray)
+}
   
-  .leftInnerContainer {
-    flex: 0.5;
-    display: flex;
-    align-items: center;
-    margin-left: 5%;
-    color: white;
-  }
+.infobar-roomcode {
+  color: var(--color-black);
+  cursor: default;
+}
   

@@ -199,9 +199,7 @@ const Game = () => {
           </div>
           <div className="guesser-camera-section">{remotePlayers}</div>
         </div>
-        <div className="chatbox">
-          <ChatBox room={gameContext.room} name={gameContext.name} />
-        </div>
+        <ChatBox room={gameContext.room} name={gameContext.name} />
       </div>
     </div>
   );
