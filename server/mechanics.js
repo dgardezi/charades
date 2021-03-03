@@ -58,19 +58,16 @@ const addUserToGame = (room, username) => {
       roomData.userPoints.set(username, 0);
       roomData.currentOrder.push(username);
 
-      if (roomData.userPoints.size !== 2) {
-        // Resend the actor and word for new user if game is started
-        var actor = roomData.currentOrder[roomData.currentActor];
-        var word = roomData.currentWord;
+      // Resend the actor and word for new user if game is started
+      var actor = roomData.currentOrder[roomData.currentActor];
+      var word = roomData.currentWord;
 
+      setTimeout(() => {
         if (word) {
           io.in(room).emit("actor", { actor });
           io.in(room).emit("word", { word });
         }
-      } else {
-        roomData.timer = 0;
-        roomData.lastTimerUpdate = currentTime();
-      }
+      }, 2000);
     }
   }
 };

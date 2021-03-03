@@ -50,25 +50,25 @@ const Game = () => {
       let timer = document.getElementById("timer");
       let mask = document.getElementById("mask");
 
-      if (percentage === 1) {
-        document.getElementById("timer").style.WebkitTransition =
-          "all 0s linear";
-      } else {
-        document.getElementById("timer").style.WebkitTransition =
-          "all 1s linear";
-      }
+      if (timer && mask) {
+        if (percentage === 1) {
+          timer.style.WebkitTransition = "all 0s linear";
+        } else {
+          timer.style.WebkitTransition = "all 1s linear";
+        }
 
-      var timerPos = -(360 - Math.floor(360 * percentage));
-      if (Math.abs(timerPos) < 180) {
-        var maskPos = 180;
-        mask.style.backgroundColor = "var(--color-pink)";
-      } else {
-        var maskPos = 0;
-        mask.style.backgroundColor = "var(--color-white)";
-      }
+        var timerPos = -(360 - Math.floor(360 * percentage));
+        if (Math.abs(timerPos) < 180) {
+          var maskPos = 180;
+          mask.style.backgroundColor = "var(--color-pink)";
+        } else {
+          var maskPos = 0;
+          mask.style.backgroundColor = "var(--color-white)";
+        }
 
-      timer.style.transform = "rotate(" + timerPos + "deg)";
-      mask.style.transform = "rotate(" + maskPos + "deg)";
+        timer.style.transform = "rotate(" + timerPos + "deg)";
+        mask.style.transform = "rotate(" + maskPos + "deg)";
+      }
     };
 
     socket.on("userConnected", (userId, username) => {
