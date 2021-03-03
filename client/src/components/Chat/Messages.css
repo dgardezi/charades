@@ -24,5 +24,5 @@
 
 /* Handle on hover */
 .messages::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-aqua);
+  background-color: #adadad;
 }
