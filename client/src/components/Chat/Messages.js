@@ -3,14 +3,15 @@ import Message from "./Message";
 import "./Messages.css";
 
 const Messages = ({ messages, name }) => {
-  const messagesEndRef = useRef(null)
+  const messagesEndRef = useRef(null);
 
-  const scrollToBottom = () => (
-    messagesEndRef.current ? messagesEndRef.current.scrollIntoView({ behavior: "smooth" }) : null
-  );
+  const scrollToBottom = () =>
+    messagesEndRef.current
+      ? messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
+      : null;
 
   useEffect(() => {
-    scrollToBottom()
+    scrollToBottom();
   }, [messages]);
 
   return (

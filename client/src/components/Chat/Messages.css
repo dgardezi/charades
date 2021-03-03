@@ -3,3 +3,26 @@
   overflow: auto;
   flex: auto;
 }
+
+/* width */
+.messages::-webkit-scrollbar {
+  width: 16px;
+}
+
+/* Track */
+.messages::-webkit-scrollbar-track {
+  visibility: hidden;
+}
+
+/* Handle */
+.messages::-webkit-scrollbar-thumb {
+  background-color: var(--color-gray);
+  border: 5px solid transparent;
+  background-clip: padding-box;
+  -webkit-border-radius: 2vw;
+}
+
+/* Handle on hover */
+.messages::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-aqua);
+}
