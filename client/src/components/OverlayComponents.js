@@ -1,8 +1,11 @@
 import React from "react";
 import "./OverlayComponents.css";
 
-const WordChoices = ({ words, onWordChoice }) => {
-  console.log(words);
+export const OverlayMessage = ({ message }) => {
+  return <p className="overlay-message">{message}</p>;
+};
+
+export const WordChoices = ({ words, onWordChoice }) => {
   const buttons = words.map((word) => (
     <button
       key={word}
@@ -15,5 +18,3 @@ const WordChoices = ({ words, onWordChoice }) => {
 
   return <div className="word-choice-buttons">{buttons}</div>;
 };
-
-export default WordChoices;

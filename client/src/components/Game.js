@@ -5,7 +5,7 @@ import Logo from "../resources/images/logo.svg";
 import ChatBox from "./Chat/ChatBox";
 import "./Game.css";
 import { GameContext } from "../GameContext";
-import WordChoices from "./OverlayComponents";
+import { WordChoices, OverlayMessage } from "./OverlayComponents";
 
 // Sound Effects
 // -------------------
@@ -85,6 +85,9 @@ const Game = () => {
       console.log("current actor: ", actor);
       setActor(actor);
       setGuessedWord(false);
+      setOverlayContents(
+        <OverlayMessage message={`${actor} is choosing a word`} />
+      );
     });
 
     socket.on("word", ({ word }) => {
@@ -92,13 +95,7 @@ const Game = () => {
       roundStartAudio.play();
       setWord(word);
       setGuessedWord(false);
-      setOverlayContents(
-        <WordChoices
-          words={["AppleAppleAppleAplle", "Banana", "Orange"]}
-          onWordChoice={handleWordChoice}
-        />
-      );
-      // setOverlayContents(null);
+      setOverlayContents(null);
     });
 
     socket.on("wordChoices", (wordChoices) => {
