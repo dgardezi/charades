@@ -182,7 +182,7 @@ const runGame = (room) => {
       var timeSinceLastUpdate = currentTime() - roomData.lastTimerUpdate;
       if (roomData.currentWord === null) {
         console.log(timeSinceLastUpdate);
-        if (timeSinceLastUpdate >= 2000) {
+        if (timeSinceLastUpdate >= 10000) {
           roomData.currentWord = timeoutWord;
           console.log(roomData.currentWord, timeoutWord);
           io.in(room).emit("word", { word: roomData.currentWord });

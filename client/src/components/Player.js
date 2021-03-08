@@ -5,7 +5,7 @@ import fullVolume from "../resources/icons/volumeFull.svg";
 import halfVolume from "../resources/icons/volumeHalf.svg";
 import mute from "../resources/icons/mute.svg";
 
-const Player = ({ player, muted, isActor }) => {
+const Player = ({ player, muted, isActor, overlayContents }) => {
   const [volumeVal, setVolumeVal] = useState(player.volume);
   const [prevVolumeVal, setPrevVolumeVal] = useState(0.5);
   const userVideo = useRef();
@@ -59,6 +59,11 @@ const Player = ({ player, muted, isActor }) => {
   return (
     <div className="playerContainer">
       <div className="videoArea">
+        {isActor && overlayContents ? (
+          <div className="actor-overlay">{overlayContents}</div>
+        ) : (
+          ""
+        )}
         <video
           ref={userVideo}
           autoPlay={true}

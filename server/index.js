@@ -148,10 +148,9 @@ io.on("connect", (socket) => {
   });
 
   socket.on("wordChoice", (word) => {
-    console.log("received word choice");
     const user = getUser(socket.id);
     setCurrentWord(user.roomName, word);
-    io.in(user.roomName).emit("word", { word });
+    io.in(user.roomName.toUpperCase()).emit("word", { word });
   });
 });
 

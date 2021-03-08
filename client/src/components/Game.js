@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import { socket } from "../Socket";
 import Player from "./Player";
 import Logo from "../resources/images/logo.svg";
 import ChatBox from "./Chat/ChatBox";
 import "./Game.css";
 import { GameContext } from "../GameContext";
+import WordChoices from "./OverlayComponents";
 
 // Sound Effects
 // -------------------
@@ -31,6 +32,7 @@ const Game = () => {
   const [userPoints, setUserPoints] = useState(null);
   const [actorPlayer, setActorPlayer] = useState(null);
   const [guessedWord, setGuessedWord] = useState(false);
+  const [overlayContents, setOverlayContents] = useState(null);
 
   useEffect(() => {
     var guessedCorrectAudio = new Audio(guessCorrectSound);
@@ -90,10 +92,20 @@ const Game = () => {
       roundStartAudio.play();
       setWord(word);
       setGuessedWord(false);
+      setOverlayContents(
+        <WordChoices
+          words={["AppleAppleAppleAplle", "Banana", "Orange"]}
+          onWordChoice={handleWordChoice}
+        />
+      );
+      // setOverlayContents(null);
     });
 
     socket.on("wordChoices", (wordChoices) => {
       setWordChoices(wordChoices);
+      setOverlayContents(
+        <WordChoices words={wordChoices} onWordChoice={handleWordChoice} />
+      );
       console.log(wordChoices);
     });
 
@@ -162,6 +174,10 @@ const Game = () => {
     }
   }, [actor, gameContext.players]);
 
+  const handleWordChoice = (word) => {
+    socket.emit("wordChoice", word);
+  };
+
   return (
     <div className="game-container">
       <div className="header">
@@ -186,13 +202,18 @@ const Game = () => {
       <div className="game-components">
         <div className="camera-section">
           <div className="actor">
-            <div className="actor-camera">
-              {actorPlayer ? (
-                <Player player={actorPlayer} muted={true} isActor={true} />
-              ) : (
-                ""
-              )}
-            </div>
+            {actorPlayer ? (
+              <div className="actor-camera">
+                <Player
+                  player={actorPlayer}
+                  muted={true}
+                  isActor={true}
+                  overlayContents={overlayContents}
+                />
+              </div>
+            ) : (
+              ""
+            )}
             <p className="guesser-name">
               {actorPlayer ? actorPlayer.username : ""}
             </p>
