@@ -25,7 +25,7 @@ import roundStartSound from "../resources/sounds/roundStart.mp3";
 const Game = () => {
   const gameContext = useContext(GameContext);
 
-  const [actor, setActor] = useState("");
+  const [actor, setActor] = useState(gameContext.name);
   const [word, setWord] = useState("");
   const [wordChoices, setWordChoices] = useState([]);
   const [time, setTime] = useState(60);
@@ -142,7 +142,7 @@ const Game = () => {
           <Player player={player} muted={player.call == null} />
         </div>
         <p className="guesser-name">{player.username}</p>
-        {/* <p>{userPoints !== null ? userPoints[player.username] : 0}</p> */}
+        <p className="guesser-pts">{userPoints !== null ? userPoints[player.username] : 0} pts</p>
       </div>
     ));
 
@@ -178,11 +178,12 @@ const Game = () => {
   return (
     <div className="game-container">
       <div className="header">
-        <img
-          src={Logo}
-          onClick={() => window.location.reload()}
-          className="header-logo"
-        />
+        <a href="/">
+          <img
+            src={Logo}
+            className="header-logo"
+          />
+        </a>
         <div className="word">
           {gameContext.players.length >= 2 ? (
             actor === gameContext.name || time === -1 || guessedWord ? (

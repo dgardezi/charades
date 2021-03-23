@@ -29,11 +29,12 @@ const Lobby = () => {
   return (
     <div className="lobby-container">
       <div className="header">
-        <img
-          src={Logo}
-          onClick={() => window.location.reload()}
-          className="header-logo"
-        />
+        <a href="/">
+          <img
+            src={Logo}
+            className="header-logo"
+          />
+        </a>
         <h1 className="header-gamecode">{gameContext.room}</h1>
         <div className="dummy" />
       </div>

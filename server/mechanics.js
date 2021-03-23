@@ -132,6 +132,7 @@ const runGame = (room) => {
         var actor = roomData.currentOrder[roomData.currentActor];
         console.log("sending actor: ", actor);
         io.in(room).emit("actor", { actor });
+        io.in(room).emit("word", { word: "" });
 
         roomData.currentWord = null;
         timeoutWord = sendWordChoices(actor, room);

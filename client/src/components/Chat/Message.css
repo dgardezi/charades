@@ -49,6 +49,10 @@
   background: var(--color-pink);
 }
 
+.backgroundAqua {
+  background: var(--color-aqua);
+}
+
 .backgroundGray {
   background-color: var(--color-lightgray);
 }
