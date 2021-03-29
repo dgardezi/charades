@@ -8,9 +8,8 @@ import { GameContext } from "./GameContext";
 import { socket } from "./Socket";
 
 const PEER_OPTIONS = {
-  secure: true,
   host: "charades1.herokuapp.com",
-  port: "443",
+  port: "9000",
   path: "video",
 };
 
