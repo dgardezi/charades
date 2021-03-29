@@ -18,17 +18,11 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("./client/build"));
 }
 
-// // Start Peer server to handle video connections
-// const { PeerServer } = require("peer");
-// const peerServer = PeerServer({
-//   port: process.env.PORT || 9000,
-//   path: "video",
-// });
-
-// if (process.env.PORT) {
-//   console.log("peer server running on port " + process.env.PORT);
-// } else {
-//   console.log("peer server running on port 3001");
-// }
+// Start Peer server to handle video connections
+const { PeerServer } = require("peer");
+const peerServer = PeerServer({
+  port: 443,
+  path: "video",
+});
 
 module.exports = { io };
