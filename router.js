@@ -13,8 +13,8 @@ const {
   closeRoom,
 } = require("./rooms");
 
-router.get("/", (req, res) => {
-  res.send({ response: "server running" }).status(200);
-});
+// router.get("/", (req, res) => {
+//   res.send({ response: "server running" }).status(200);
+// });
 
 module.exports = router;
