@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === "production") {
 // Start Peer server to handle video connections
 const { PeerServer } = require("peer");
 const peerServer = PeerServer({
-  port: 443,
+  port: process.env.PORT || 443,
   path: "video",
 });
 

@@ -10,7 +10,7 @@ import { socket } from "./Socket";
 const PEER_OPTIONS = {
   secure: true,
   host: "charades1.herokuapp.com",
-  port: "443",
+  port: process.env.PORT || 443,
   path: "video",
 };
 
