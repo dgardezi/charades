@@ -1,6 +1,9 @@
 var express = require("express");
 var app = express();
-var server = app.listen(3001);
+
+const port = process.env.PORT || 3001;
+
+var server = app.listen(port);
 const socketio = require("socket.io");
 const io = socketio(server);
 
@@ -9,13 +12,8 @@ const cors = require("cors");
 app.use(cors());
 app.use(router);
 
-app.set("port", process.env.PORT || 3001);
-
-if (process.env.PORT) {
-  console.log("server running on port " + process.env.PORT);
-} else {
-  console.log("server running on port 3001");
-}
+app.set("port", port);
+console.log("server running on port " + port);
 
 // Express only serves static assets in production
 // if (process.env.NODE_ENV === "production") {
