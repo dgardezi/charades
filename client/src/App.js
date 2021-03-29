@@ -8,7 +8,7 @@ import { GameContext } from "./GameContext";
 import { socket } from "./Socket";
 
 const PEER_OPTIONS = {
-  host: "https://charades-peerjs.herokuapp.com/",
+  host: "charades-peerjs.herokuapp.com/",
   path: "/",
   port: 14077,
 };
