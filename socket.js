@@ -16,9 +16,9 @@ app.set("port", port);
 console.log("server running on port " + port);
 
 // Express only serves static assets in production
-// if (process.env.NODE_ENV === "production") {
-//   app.use(express.static("./client/build"));
-// }
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("./client/build"));
+}
 
 // // Start Peer server to handle video connections
 // const { PeerServer } = require("peer");
