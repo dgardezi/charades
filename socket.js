@@ -9,7 +9,6 @@ const io = socketio(server);
 
 const cors = require("cors");
 app.use(cors());
-app.use(router);
 
 app.set("port", port);
 console.log("server running on port " + port);
