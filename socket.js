@@ -7,7 +7,6 @@ var server = app.listen(port);
 const socketio = require("socket.io");
 const io = socketio(server);
 
-const router = require("./router");
 const cors = require("cors");
 app.use(cors());
 app.use(router);
