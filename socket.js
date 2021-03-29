@@ -18,14 +18,14 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("./client/build"));
 }
 
-// Start Peer server to handle video connections
-var ExpressPeerServer = require("peer").ExpressPeerServer;
+// // Start Peer server to handle video connections
+// var ExpressPeerServer = require("peer").ExpressPeerServer;
 
-var options = {
-  debug: true,
-};
+// var options = {
+//   debug: true,
+// };
 
-var server = require("http").createServer(app);
-app.use("/peerjs", ExpressPeerServer(server, options));
+// var server = require("http").createServer(app);
+// app.use("/peerjs", ExpressPeerServer(server, options));
 
 module.exports = { io };
