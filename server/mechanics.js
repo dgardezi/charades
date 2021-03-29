@@ -112,11 +112,12 @@ const runGame = (room) => {
       (roomData.userPoints.size !== 1 &&
         roomData.guessedCorrectly.size === roomData.userPoints.size - 1)
     ) {
-      roomData.currentActor += 1;
       // Wait for time to pass before starting game
       var timeSinceLastGame = currentTime() - roomData.lastTimerUpdate;
 
       if (timeSinceLastGame > timeoutBetweenGames) {
+        roomData.currentActor += 1;
+
         if (roomData.currentActor >= roomData.currentOrder.length) {
           // Start new round
           // Get random order of actors
@@ -127,7 +128,6 @@ const runGame = (room) => {
         //sendActor
         var actor = roomData.currentOrder[roomData.currentActor];
         io.in(room).emit("actor", { actor });
-        io.in(room).emit("word", { word: "" });
 
         roomData.currentWord = null;
         timeoutWord = sendWordChoices(actor, room);
@@ -265,7 +265,7 @@ const getUserPoints = (room) => {
 const distMessage = (user, message) => {
   gameData = activeGames.get(user.roomName.toUpperCase());
   users = getUsersFromRoom(user.roomName.toUpperCase());
-  
+
   // if the user has correctly guessed, only send their message to others who also correctly guessed
   if (
     gameData.guessedCorrectly !== null &&

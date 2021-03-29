@@ -32,7 +32,9 @@ const Game = () => {
   const [userPoints, setUserPoints] = useState(null);
   const [actorPlayer, setActorPlayer] = useState(null);
   const [guessedWord, setGuessedWord] = useState(false);
-  const [overlayContents, setOverlayContents] = useState(null);
+  const [overlayContents, setOverlayContents] = useState(
+    <OverlayMessage message={`waiting for game to start`} />
+  );
 
   useEffect(() => {
     var guessedCorrectAudio = new Audio(guessCorrectSound);
@@ -83,6 +85,7 @@ const Game = () => {
 
     socket.on("actor", ({ actor }) => {
       setActor(actor);
+      setWord("");
       setGuessedWord(false);
       setOverlayContents(
         <OverlayMessage message={`${actor} is choosing a word`} />
@@ -135,7 +138,9 @@ const Game = () => {
           <Player player={player} muted={player.call == null} />
         </div>
         <p className="guesser-name">{player.username}</p>
-        <p className="guesser-pts">{userPoints !== null ? userPoints[player.username] : 0} pts</p>
+        <p className="guesser-pts">
+          {userPoints !== null ? userPoints[player.username] : 0} pts
+        </p>
       </div>
     ));
 
@@ -171,16 +176,15 @@ const Game = () => {
 
     if (gameContext.players.length >= 2) {
       if (actor === gameContext.name || time === -1 || guessedWord) {
-        render = (<h1>{word}</h1>);
-      }
-      else {
-        render = (<h1>{getWordHint(word)}</h1>);
+        render = <h1>{word}</h1>;
+      } else {
+        render = <h1>{getWordHint(word)}</h1>;
       }
     } else {
       if (word !== "") {
         setWord("");
       }
-      render = (<h1>Waiting for players</h1>);
+      render = <h1>waiting for players</h1>;
     }
 
     return render;
@@ -190,14 +194,9 @@ const Game = () => {
     <div className="game-container">
       <div className="header">
         <a href="/">
-          <img
-            src={Logo}
-            className="header-logo"
-          />
+          <img src={Logo} className="header-logo" />
         </a>
-        <div className="word">
-          {renderWord()}
-        </div>
+        <div className="word">{renderWord()}</div>
         <div className="dummy"></div>
       </div>
       <div className="game-components">

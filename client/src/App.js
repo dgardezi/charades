@@ -11,7 +11,6 @@ const PEER_OPTIONS = {
   host: "localhost",
   port: "9000",
   path: "video",
-  debug: 3,
 };
 
 const App = () => {
