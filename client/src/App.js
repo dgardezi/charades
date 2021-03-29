@@ -9,7 +9,7 @@ import { socket } from "./Socket";
 
 const PEER_OPTIONS = {
   host: "charades1.herokuapp.com",
-  path: "video",
+  path: "/peerjs",
 };
 
 const App = () => {

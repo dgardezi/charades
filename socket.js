@@ -26,6 +26,6 @@ var options = {
 };
 
 var server = require("http").createServer(app);
-app.use("video", ExpressPeerServer(server, options));
+app.use("/peerjs", ExpressPeerServer(server, options));
 
 module.exports = { io };
