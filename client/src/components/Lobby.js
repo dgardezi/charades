@@ -18,7 +18,6 @@ const Lobby = () => {
   ));
 
   const startGame = () => {
-    console.log("starting game");
     socket.emit("startGameQuery", { room: gameContext.room }, (error) => {
       if (error) {
         alert(error);

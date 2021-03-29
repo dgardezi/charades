@@ -18,7 +18,6 @@ const App = () => {
   const gameContext = useContext(GameContext);
 
   const addPlayer = (userId, username, stream, call) => {
-    console.log("adding player", gameContext.players);
     gameContext.setPlayers((prevplayers) => [
       ...prevplayers,
       {
@@ -32,20 +31,12 @@ const App = () => {
   };
 
   const connectToNewUser = (userId, username, stream) => {
-    console.log(
-      `connecting to ${userId}, ${username} at ${new Date().getTime()}`
-    );
     const call = gameContext.myPeer.call(userId, stream, {
       metadata: { username: gameContext.name },
     });
-
-    console.log(`setting up stream for response ${new Date().getTime()}`);
     let count = 0;
     call.on("stream", (userVideoStream) => {
       if (count++ % 2 === 0) {
-        console.log(
-          `receiving stream from ${username} at ${new Date().getTime()}`
-        );
         addPlayer(userId, username, userVideoStream, call);
       }
     });
@@ -54,8 +45,6 @@ const App = () => {
   useEffect(() => {
     // Setup peer on startup
     if (socket.id) {
-      //console.log(socket.id);
-      console.log(socket.id, Date.now());
       gameContext.setMyPeer(new Peer(socket.id, PEER_OPTIONS));
     }
   }, [socket]);
@@ -71,7 +60,6 @@ const App = () => {
   useEffect(() => {
     socket.on("joinRoomResponse", ({ response, room }) => {
       const { status, message } = response;
-      console.log("Success:", response);
       if (status === 0) {
         gameContext.setRoom(room);
         gameContext.setState("lobby");
@@ -82,7 +70,6 @@ const App = () => {
 
     socket.on("startGameResponse", ({ response }) => {
       const { status, message } = response;
-      console.log("Success:", response);
       if (status === 0) {
         gameContext.setState("game");
       } else {
@@ -91,8 +78,6 @@ const App = () => {
     });
 
     socket.on("userDisconnected", ({ userId }) => {
-      console.log(`Removing user ${userId}`);
-
       // Close connection to user
       var dcUser = gameContext.players.find(
         (player) => player.userId === userId
@@ -111,23 +96,16 @@ const App = () => {
   useEffect(() => {
     const setupConnections = async (stream) => {
       // Setup socket to answer calls and share stream from other users
-      console.log("setting up answering machine", new Date().getTime());
       await gameContext.myPeer.on("call", (call) => {
         const userId = call.peer;
         const username = call.metadata.username;
-        console.log(
-          `receiving call from ${username} at ${new Date().getTime()}`
-        );
+
         call.answer(stream);
 
         // Wait to receive the users stream
-        console.log("setting up stream answer once");
         let count = 0;
         call.on("stream", (userVideoStream) => {
           if (count++ % 2 === 0) {
-            console.log(
-              `receiving stream from ${userId} at ${new Date().getTime()}`
-            );
             addPlayer(userId, username, userVideoStream, call);
           }
         });
@@ -151,7 +129,6 @@ const App = () => {
 
           // After all connections are made, let server know to let other users in room know.
           setupConnections(stream).then(() => {
-            console.log("connecting to other users");
             socket.emit("userConnected", gameContext.room);
           });
         });

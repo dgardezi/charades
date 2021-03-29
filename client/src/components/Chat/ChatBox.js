@@ -12,7 +12,6 @@ const ChatBox = ({ room, name }) => {
 
   useEffect(() => {
     socket.on("message", (message) => {
-      console.log("receiving message:", message);
       setMessages((messages) => [...messages, message]);
     });
   }, []);
@@ -21,7 +20,6 @@ const ChatBox = ({ room, name }) => {
     event.preventDefault();
 
     if (message) {
-      console.log("attempting to send", message);
       socket.emit("sendMessage", { message: message });
       setMessage("");
     }

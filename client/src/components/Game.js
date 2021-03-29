@@ -82,7 +82,6 @@ const Game = () => {
     });
 
     socket.on("actor", ({ actor }) => {
-      console.log("current actor: ", actor);
       setActor(actor);
       setGuessedWord(false);
       setOverlayContents(
@@ -91,7 +90,6 @@ const Game = () => {
     });
 
     socket.on("word", ({ word }) => {
-      console.log("current word: ", word);
       roundStartAudio.play();
       setWord(word);
       setGuessedWord(false);
@@ -103,7 +101,6 @@ const Game = () => {
       setOverlayContents(
         <WordChoices words={wordChoices} onWordChoice={handleWordChoice} />
       );
-      console.log(wordChoices);
     });
 
     socket.on("timer", ({ time }) => {
@@ -119,18 +116,14 @@ const Game = () => {
     });
 
     socket.on("guessed", (username) => {
-      console.log(`${username} guessed word!`);
       guessedCorrectAudio.play();
       if (username === gameContext.name) {
-        console.log("YOU GUESSED THE WORD");
         setGuessedWord(true);
       }
     });
 
     socket.on("points", (points) => {
-      console.log("received points", points);
       setUserPoints(points);
-      console.log(points);
     });
   }, []);
 
@@ -157,14 +150,12 @@ const Game = () => {
 
   useEffect(() => {
     if (actor === gameContext.name) {
-      console.log("setting actor player to local participant");
       setActorPlayer(
         gameContext.players.find(
           (player) => player.username === gameContext.name
         )
       );
     } else if (actor !== "") {
-      console.log("setting actor to remote participant");
       setActorPlayer(
         gameContext.players.find((player) => player.username === actor)
       );
@@ -173,6 +164,26 @@ const Game = () => {
 
   const handleWordChoice = (word) => {
     socket.emit("wordChoice", word);
+  };
+
+  const renderWord = () => {
+    let render;
+
+    if (gameContext.players.length >= 2) {
+      if (actor === gameContext.name || time === -1 || guessedWord) {
+        render = (<h1>{word}</h1>);
+      }
+      else {
+        render = (<h1>{getWordHint(word)}</h1>);
+      }
+    } else {
+      if (word !== "") {
+        setWord("");
+      }
+      render = (<h1>Waiting for players</h1>);
+    }
+
+    return render;
   };
 
   return (
@@ -185,15 +196,7 @@ const Game = () => {
           />
         </a>
         <div className="word">
-          {gameContext.players.length >= 2 ? (
-            actor === gameContext.name || time === -1 || guessedWord ? (
-              <h1>{word}</h1>
-            ) : (
-              <h1>{getWordHint(word)}</h1>
-            )
-          ) : (
-            <h1>Waiting for players</h1>
-          )}
+          {renderWord()}
         </div>
         <div className="dummy"></div>
       </div>

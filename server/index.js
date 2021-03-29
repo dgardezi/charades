@@ -24,10 +24,7 @@ const {
 } = require("./mechanics");
 
 io.engine.generateId = (req) => {
-  let variable = uuid_v4();
-  console.log(variable);
-  console.log(Date.now());
-  return variable;
+  return uuid_v4();
 };
 
 io.on("connect", (socket) => {
@@ -50,7 +47,7 @@ io.on("connect", (socket) => {
           response,
         });
 
-        addUserToGame(room, name);
+        addUserToGame(room, name, socket.id);
       }
     }
   });
@@ -59,7 +56,7 @@ io.on("connect", (socket) => {
   // let all other users know.
   // Cannot be in joinRoomResponse since client needs time to setup sockets.
   socket.on("userConnected", (room) => {
-    console.log("userConnected", room, socket.id, getUser(socket.id).userName);
+    console.log(`${getUser(socket.id).userName} connected to ${room}`);
     // Let all other users that user has connected
     socket
       .to(room)
@@ -71,7 +68,7 @@ io.on("connect", (socket) => {
   });
 
   socket.on("createRoomQuery", ({ name }) => {
-    console.log(`${name} tried to make a new room`);
+    console.log(`${name} trying to make a new room`);
 
     const room = createRoom();
     const response = addUserToRoom(socket.id, name, room);
@@ -87,7 +84,7 @@ io.on("connect", (socket) => {
     console.log(`${room} trying to start game`);
 
     var users = getUsersFromRoom(room);
-    console.log("creating game: ", room, users);
+    console.log("starting game: ", room);
     createGame(room, users);
     const response = { status: 0, message: "Success" };
 
@@ -97,9 +94,7 @@ io.on("connect", (socket) => {
   });
 
   socket.on("sendMessage", ({ message }) => {
-    console.log(message);
     const user = getUser(socket.id);
-    console.log(user);
 
     // Check if they have an active running game
     // if yes, check if they have already guessed the word
@@ -126,7 +121,6 @@ io.on("connect", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("user disconnected");
     const user = getUser(socket.id);
 
     if (user) {
@@ -153,5 +147,3 @@ io.on("connect", (socket) => {
     io.in(user.roomName.toUpperCase()).emit("word", { word });
   });
 });
-
-console.log("server running on port 3001");

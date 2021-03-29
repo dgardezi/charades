@@ -17,7 +17,6 @@ const Home = () => {
 
   const joinRoom = () => {
     if (gameContext.name && gameContext.room) {
-      console.log("Trying to join room ", gameContext.room);
       socket.emit(
         "joinRoomQuery",
         { name: gameContext.name, room: gameContext.room },
@@ -32,7 +31,6 @@ const Home = () => {
 
   const createRoom = () => {
     if (gameContext.name) {
-      console.log("Trying to create new room");
       socket.emit("createRoomQuery", { name: gameContext.name }, (error) => {
         if (error) {
           alert(error);

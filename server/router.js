@@ -14,7 +14,6 @@ const {
 } = require("./rooms");
 
 router.get("/", (req, res) => {
-  console.log(req);
   res.send({ response: "server running" }).status(200);
 });
 

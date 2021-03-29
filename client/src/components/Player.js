@@ -29,15 +29,12 @@ const Player = ({ player, muted, isActor, overlayContents }) => {
 
   const handleVolumePress = useCallback(
     (event) => {
-      console.log("here", volumeVal);
       if (volumeVal !== 0) {
         setPrevVolumeVal(volumeVal);
         setVolumeVal(0);
         player.volume = 0;
         document.getElementById("volControl").value = 0;
       } else {
-        console.log("there");
-        console.log(prevVolumeVal);
         setVolumeVal(prevVolumeVal);
         player.volume = prevVolumeVal;
         document.getElementById("volControl").value = prevVolumeVal;

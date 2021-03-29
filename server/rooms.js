@@ -23,9 +23,6 @@ const addUserToRoom = (id, name, room) => {
   // name = name.trim().toLowerCase();
   room = room.trim().toLowerCase();
 
-  console.log(rooms);
-  console.log(room);
-
   if (rooms.has(room)) {
     const roomUsers = rooms.get(room);
     const userNames = roomUsers.map((userId) => users.get(userId).userName);
@@ -46,7 +43,6 @@ const addUserToRoom = (id, name, room) => {
 };
 
 const removeUserFromRoom = (id, room) => {
-  console.log("user removed");
   room = room.trim().toLowerCase();
 
   if (rooms.has(room)) {
@@ -102,7 +98,7 @@ const createRoom = () => {
 };
 
 const closeRoom = (roomName) => {
-  console.log(`Closing Room ${roomName}`);
+  console.log(`closing room ${roomName}`);
   if (rooms.has(roomName)) {
     // Remove all users in roomName
     const roomUsers = rooms.get(roomName);

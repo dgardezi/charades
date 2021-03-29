@@ -15,13 +15,12 @@ const setCurrentWord = (room, word) => {
 const createGame = (room, users) => {
   // Map (keys: userName, value: points)
   let userPoints = new Map(users.map((u) => [u.userName, 0]));
-  console.log(userPoints);
   var currentOrder = [...userPoints.keys()];
   var currentActor = -1;
   var currentWord = null;
   var timer = -1;
   var lastTimerUpdate = currentTime();
-  var revealed = false;
+  var roundRunning = false;
   var guessedCorrectly = null; // Set of players who have guessed the word
 
   activeGames.set(room, {
@@ -31,7 +30,7 @@ const createGame = (room, users) => {
     currentWord,
     timer,
     lastTimerUpdate,
-    revealed,
+    roundRunning,
     guessedCorrectly,
   });
 
@@ -43,18 +42,16 @@ const createGame = (room, users) => {
 const endGame = (room) => {
   room = room.toUpperCase();
   if (activeGames.has(room)) {
-    console.log(`Ending game for room ${room}`);
     clearInterval(activeGames.get(room).gameId);
     activeGames.delete(room);
   }
 };
 
-const addUserToGame = (room, username) => {
+const addUserToGame = (room, username, id) => {
   room = room.toUpperCase();
   if (activeGames.has(room)) {
     var roomData = activeGames.get(room);
     if (!roomData.userPoints.has(username)) {
-      console.log(`Adding ${username} to ${room}!`);
       roomData.userPoints.set(username, 0);
       roomData.currentOrder.push(username);
 
@@ -62,12 +59,15 @@ const addUserToGame = (room, username) => {
       var actor = roomData.currentOrder[roomData.currentActor];
       var word = roomData.currentWord;
 
-      setTimeout(() => {
-        if (word) {
-          io.in(room).emit("actor", { actor });
-          io.in(room).emit("word", { word });
-        }
-      }, 2000);
+      // Gives user time to join before sending room info
+      if (roomData.roundRunning) {
+        setTimeout(() => {
+          if (word) {
+            io.to(id).emit("actor", { actor });
+            io.to(id).emit("word", { word });
+          }
+        }, 2000);
+      }
     }
   }
 };
@@ -80,7 +80,6 @@ const removeUserFromGame = (room, username) => {
 
     if (roomData.userPoints.has(username)) {
       // Remove user from users with points and actor candidates
-      console.log(`Removing ${username} from ${room}`);
       roomData.userPoints.delete(username);
       const index = roomData.currentOrder.indexOf(username);
       if (index > -1) {
@@ -113,10 +112,7 @@ const runGame = (room) => {
       (roomData.userPoints.size !== 1 &&
         roomData.guessedCorrectly.size === roomData.userPoints.size - 1)
     ) {
-      if (!roomData.revealed) {
-        roomData.revealed = true;
-        roomData.currentActor += 1;
-      }
+      roomData.currentActor += 1;
       // Wait for time to pass before starting game
       var timeSinceLastGame = currentTime() - roomData.lastTimerUpdate;
 
@@ -130,43 +126,11 @@ const runGame = (room) => {
 
         //sendActor
         var actor = roomData.currentOrder[roomData.currentActor];
-        console.log("sending actor: ", actor);
         io.in(room).emit("actor", { actor });
         io.in(room).emit("word", { word: "" });
 
         roomData.currentWord = null;
         timeoutWord = sendWordChoices(actor, room);
-        console.log(timeoutWord);
-
-        // let toWait = 250;
-        // let counter = 0;
-        // var intervalId = setInterval(() => {
-        //   console.log(intervalId);
-        //   clearInterval(intervalId);
-        //   if (roomData.currentWord === null) {
-        //     counter += toWait;
-        //     console.log(counter);
-        //     if (counter >= 2000) {
-        //       roomData.currentWord = timeoutWord;
-        //       io.in(room).emit("word", { word: roomData.currentWord });
-        //       clearInterval(intervalId);
-        //     }
-        //   } else {
-        //     clearInterval(intervalId);
-        //   }
-        // }, toWait);
-
-        // while (currentWord === null) {
-        //   console.log(counter);
-        //   setTimeout(() => {
-        //     counter += toWait;
-        //     if (counter > 10000) {
-        //       currentWord = timeoutWord;
-        //       io.in(room).emit("word", { currentWord });
-        //     }
-        //   }, toWait);
-        // }
-        // console.log("out of interval loop");
 
         roomData.guessedCorrectly = new Set();
 
@@ -177,18 +141,23 @@ const runGame = (room) => {
         io.in(room).emit("timer", { time });
 
         roomData.lastTimerUpdate = currentTime();
-        roomData.revealed = false;
+        roomData.roundRunning = true;
       }
     } else {
       var timeSinceLastUpdate = currentTime() - roomData.lastTimerUpdate;
+
+      if (roomData.userPoints.size === 1) {
+        roomData.roundRunning = false;
+      } else if (!roomData.roundRunning && roomData.userPoints.size >= 2) {
+        roomData.timer = -1;
+      }
+
       if (roomData.currentWord === null) {
-        console.log(timeSinceLastUpdate);
         if (timeSinceLastUpdate >= 10000) {
           roomData.currentWord = timeoutWord;
-          console.log(roomData.currentWord, timeoutWord);
           io.in(room).emit("word", { word: roomData.currentWord });
         }
-      } else if (timeSinceLastUpdate > 1000 && roomData.userPoints.size !== 1) {
+      } else if (timeSinceLastUpdate > 1000 && roomData.roundRunning) {
         roomData.timer -= 1;
 
         // send update timer
@@ -199,7 +168,7 @@ const runGame = (room) => {
       }
     }
   } else {
-    console.log("An unexpected error has occured while running game.");
+    console.log("an unexpected error has occured while running game");
   }
 };
 
@@ -224,7 +193,6 @@ const shuffle = (array) => {
 };
 
 const sendWordChoices = (actor, room) => {
-  console.log("sending word choices");
   gameData = activeGames.get(room.toUpperCase());
   let wordChoices = new Set();
   users = getUsersFromRoom(room.toUpperCase());
@@ -283,7 +251,7 @@ const addUserPoint = (username, room) => {
   gameData.userPoints.set(
     username,
     gameData.userPoints.get(username) + gameData.timer * 10
-  ); // * 1/gussedCorrectly.length());
+  );
   gameData.userPoints.set(
     gameData.currentOrder[gameData.currentActor],
     gameData.userPoints.get(gameData.currentOrder[gameData.currentActor]) + 100
@@ -291,13 +259,13 @@ const addUserPoint = (username, room) => {
 };
 
 const getUserPoints = (room) => {
-  // console.log(activeGames.get(room.toUpperCase()).userPoints);
   return activeGames.get(room.toUpperCase()).userPoints;
 };
 
 const distMessage = (user, message) => {
   gameData = activeGames.get(user.roomName.toUpperCase());
   users = getUsersFromRoom(user.roomName.toUpperCase());
+  
   // if the user has correctly guessed, only send their message to others who also correctly guessed
   if (
     gameData.guessedCorrectly !== null &&
