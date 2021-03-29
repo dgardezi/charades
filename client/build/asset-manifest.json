@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/static/css/main.5b9ba845.chunk.css",
+    "main.js": "/static/js/main.c5c24a6d.chunk.js",
+    "main.js.map": "/static/js/main.c5c24a6d.chunk.js.map",
+    "runtime~main.js": "/static/js/runtime~main.00070426.js",
+    "runtime~main.js.map": "/static/js/runtime~main.00070426.js.map",
+    "static/js/2.d882277c.chunk.js": "/static/js/2.d882277c.chunk.js",
+    "static/js/2.d882277c.chunk.js.map": "/static/js/2.d882277c.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.9126607e8bf812560e5e0c5bc1a01e25.js": "/precache-manifest.9126607e8bf812560e5e0c5bc1a01e25.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.5b9ba845.chunk.css.map": "/static/css/main.5b9ba845.chunk.css.map",
+    "static/media/correctGuess.mp3": "/static/media/correctGuess.abbd5947.mp3",
+    "static/media/error.svg": "/static/media/error.25e3f2c4.svg",
+    "static/media/logo.svg": "/static/media/logo.d642444b.svg",
+    "static/media/mute.svg": "/static/media/mute.7c949b53.svg",
+    "static/media/playerJoin.mp3": "/static/media/playerJoin.22614250.mp3",
+    "static/media/playerLeave.mp3": "/static/media/playerLeave.2ed3dd57.mp3",
+    "static/media/roundEnd.mp3": "/static/media/roundEnd.d9a7eee5.mp3",
+    "static/media/roundStart.mp3": "/static/media/roundStart.e6e97ef3.mp3",
+    "static/media/send-button.svg": "/static/media/send-button.184677f0.svg",
+    "static/media/timerLow.mp3": "/static/media/timerLow.7a00b8ca.mp3",
+    "static/media/volumeFull.svg": "/static/media/volumeFull.52052744.svg",
+    "static/media/volumeHalf.svg": "/static/media/volumeHalf.5437f749.svg"
+  }
+}
