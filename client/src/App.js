@@ -13,6 +13,8 @@ const PEER_OPTIONS = {
   debug: 3,
 };
 
+console.log(process.env.PORT || 3001);
+
 const App = () => {
   const gameContext = useContext(GameContext);
 
