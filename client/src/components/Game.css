@@ -66,6 +66,8 @@
   width: 116vh;
   height: 100%;
 
+  overflow: hidden;
+
   /* margin-bottom: 3vh; */
 }
 
