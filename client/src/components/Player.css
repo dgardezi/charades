@@ -90,7 +90,7 @@
 }
 
 .volumeButton {
-  opacity: 0%;
+  opacity: 0;
   width: 60%;
   height: auto;
   transition: opacity 0.2s;
@@ -98,8 +98,8 @@
 }
 
 .slider {
-  visibility: hidden;
-  opacity: 0%;
+  visibility: visible;
+  opacity: 0;
   -webkit-appearance: none;
   appearance: none;
   overflow: hidden;
@@ -124,23 +124,23 @@
   box-shadow: -100vw 0 0 100vw var(--color-pink);
 }
 
-.volumeButton:hover {
-  cursor: pointer;
-}
-
 .videoArea:hover > .volumeControls .volumeButton {
   transition-delay: 0s;
-  opacity: 100%;
+  opacity: 100;
+}
+
+.volumeButton:hover {
+  cursor: pointer;
 }
 
 .slider:hover {
   cursor: pointer;
   visibility: visible;
-  opacity: 100%;
+  opacity: 100;
 }
 
 .volumeButton:hover + .slider {
   transition-delay: 0s;
   visibility: visible;
-  opacity: 100%;
+  opacity: 100;
 }

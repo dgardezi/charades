@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/static/css/main.5b9ba845.chunk.css",
+    "main.css": "/static/css/main.f7887e2d.chunk.css",
     "main.js": "/static/js/main.e0054a40.chunk.js",
     "main.js.map": "/static/js/main.e0054a40.chunk.js.map",
     "runtime~main.js": "/static/js/runtime~main.00070426.js",
@@ -8,9 +8,9 @@
     "static/js/2.d882277c.chunk.js": "/static/js/2.d882277c.chunk.js",
     "static/js/2.d882277c.chunk.js.map": "/static/js/2.d882277c.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.cc2a99796e9638951cb79867698156aa.js": "/precache-manifest.cc2a99796e9638951cb79867698156aa.js",
+    "precache-manifest.16bac9dba32fc7d7de90b059d9270814.js": "/precache-manifest.16bac9dba32fc7d7de90b059d9270814.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/main.5b9ba845.chunk.css.map": "/static/css/main.5b9ba845.chunk.css.map",
+    "static/css/main.f7887e2d.chunk.css.map": "/static/css/main.f7887e2d.chunk.css.map",
     "static/media/correctGuess.mp3": "/static/media/correctGuess.abbd5947.mp3",
     "static/media/error.svg": "/static/media/error.25e3f2c4.svg",
     "static/media/logo.svg": "/static/media/logo.d642444b.svg",
