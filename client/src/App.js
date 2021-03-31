@@ -8,13 +8,18 @@ import { GameContext } from "./GameContext";
 import { socket } from "./Socket";
 
 const PEER_OPTIONS = {
-  host: "charades-peerjs.herokuapp.com/",
-  path: "/",
-  port: 14077,
+  secure: true,
+  host: "charades-peerjs.herokuapp.com",
+  debug: 3,
 };
 
 const App = () => {
   const gameContext = useContext(GameContext);
+
+  socket.on("connect", () => {
+    console.log(socket.id);
+    gameContext.setMyPeer(new Peer(socket.id, PEER_OPTIONS));
+  });
 
   const addPlayer = (userId, username, stream, call) => {
     gameContext.setPlayers((prevplayers) => [
@@ -40,13 +45,6 @@ const App = () => {
       }
     });
   };
-
-  useEffect(() => {
-    // Setup peer on startup
-    if (socket.id) {
-      gameContext.setMyPeer(new Peer(socket.id, PEER_OPTIONS));
-    }
-  }, [socket]);
 
   useEffect(() => {
     if (gameContext.myPeer) {
